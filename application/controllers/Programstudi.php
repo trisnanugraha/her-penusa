@@ -13,7 +13,7 @@ class Programstudi extends MY_Controller
     public function index()
     {
         $data['judul'] = 'Program Studi';
-        $data['modal_tambah_program_studi'] = show_my_modal('program_studi/modal_tambah_program_studi', $data);
+        $data['modal'] = show_my_modal('program_studi/modal_program_studi', $data);
         $js = $this->load->view('program_studi/program-studi-js', null, true);
         $this->template->views('program_studi/home', $data, $js);
     }

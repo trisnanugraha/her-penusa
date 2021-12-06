@@ -34,4 +34,4 @@
     <!-- /.container-fluid -->
 </section>
 
-<?php echo $modal_tambah_program_studi; ?>
+<?php echo $modal; ?>

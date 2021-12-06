@@ -92,7 +92,7 @@
                             reload_table();
                             Swal.fire({
                                 icon: 'success',
-                                title: 'Data Berhasil Dihapus!'
+                                title: 'Program Studi Berhasil Dihapus!'
                             });
                         } else {
                             Toast.fire({
@@ -172,12 +172,12 @@
                     if (save_method == 'add') {
                         Toast.fire({
                             icon: 'success',
-                            title: 'Data Program Studi Berhasil Disimpan!'
+                            title: 'Program Studi Berhasil Disimpan!'
                         });
                     } else if (save_method == 'update') {
                         Toast.fire({
                             icon: 'success',
-                            title: 'Data Program Studi Berhasil Diubah!'
+                            title: 'Program Studi Berhasil Diubah!'
                         });
                     }
                 } else {
