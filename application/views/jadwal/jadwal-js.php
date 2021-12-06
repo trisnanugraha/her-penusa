@@ -8,7 +8,7 @@
       "responsive": true,
       "autoWidth": false,
       "language": {
-        "sEmptyTable": "Data Jadwal Masih Kosong"
+        "sEmptyTable": "Data Jadwal Registrasi Masih Kosong"
       },
       "processing": true, //Feature control the processing indicator.
       "serverSide": true, //Feature control DataTables' server-side processing mode.
@@ -186,12 +186,12 @@
           if (save_method == 'add') {
             Toast.fire({
               icon: 'success',
-              title: 'Data Jadwal Registrasi Berhasil Disimpan!'
+              title: 'Jadwal Registrasi Berhasil Disimpan!'
             });
           } else if (save_method == 'update') {
             Toast.fire({
               icon: 'success',
-              title: 'Data Jadwal Registrasi Berhasil Diubah!'
+              title: 'Jadwal Registrasi Berhasil Diubah!'
             });
           }
         } else {

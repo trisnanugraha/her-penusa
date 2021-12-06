@@ -7,13 +7,13 @@ class Jadwal extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model(array('Mod_jadwal'));
+        $this->load->model('Mod_jadwal');
     }
 
     public function index()
     {
         $data['judul'] = 'Jadwal Registrasi';
-        $data['modal_jadwal'] = show_my_modal('jadwal/modal_jadwal', $data);
+        $data['modal'] = show_my_modal('jadwal/modal_jadwal', $data);
         $js = $this->load->view('jadwal/jadwal-js', null, true);
         $this->template->views('jadwal/home', $data, $js);
     }

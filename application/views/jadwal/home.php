@@ -37,4 +37,4 @@
       <!-- /.container-fluid -->
     </section>
 
-    <?php echo $modal_jadwal; ?>
+    <?php echo $modal; ?>
