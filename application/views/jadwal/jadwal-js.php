@@ -28,7 +28,7 @@
       }, {
         "targets": [-1], //last column
         "render": function(data, type, row) {
-          if (row[4] == "Non-Aktif") {
+          if (row[4] == "N") {
             return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit_jadwal(" + row[5] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-danger\" href=\"javascript:void(0)\" title=\"Delete\" onclick=\"delete_jadwal(" + row[5] + ")\"><i class=\"fas fa-trash\"></i> Hapus</a></div>"
           } else {
             return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit_jadwal(" + row[5] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div>";
@@ -43,7 +43,7 @@
       }, {
         "targets": [-2], //last column
         "render": function(data, type, row) {
-          if (row[4] == "Non-Aktif") {
+          if (row[4] == "N") {
             return "<div class=\"badge bg-danger text-white text-wrap\">Non-Aktif</div>"
           } else {
             return "<div class=\"badge bg-success text-white text-wrap\">Aktif</div>";

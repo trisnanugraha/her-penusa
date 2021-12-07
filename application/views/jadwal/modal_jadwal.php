@@ -35,8 +35,8 @@
                         <div class="col-sm-8 kosong">
                             <select class="form-control" name="status" id="status">
                                 <option value="" selected disabled>Pilih Status</option>
-                                <option value="Aktif">Aktif</option>
-                                <option value="Non-Aktif">Non-Aktif</option>
+                                <option value="Y">Aktif</option>
+                                <option value="N">Non-Aktif</option>
                             </select>
                         </div>
                     </div>
