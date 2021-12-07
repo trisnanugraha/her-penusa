@@ -92,13 +92,13 @@ class Login extends CI_Controller
 
         if ($this->input->post('username') == '') {
             $data['inputerror'][] = 'username';
-            $data['error_string'][] = 'Username is required';
+            $data['error_string'][] = 'Username Tidak Boleh Kosong';
             $data['status'] = FALSE;
         }
 
         if ($this->input->post('password') == '') {
             $data['inputerror'][] = 'password';
-            $data['error_string'][] = 'Password is required';
+            $data['error_string'][] = 'Password Tidak Boleh Kosong';
             $data['status'] = FALSE;
         }
 
