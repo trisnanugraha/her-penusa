@@ -4,36 +4,52 @@
 
   $(document).ready(function() {
 
-    table = $("#tabelangkatan").DataTable({
+    table = $("#tabeljadwal").DataTable({
       "responsive": true,
       "autoWidth": false,
       "language": {
-        "sEmptyTable": "Data Tahun Angkatan Masih Kosong"
+        "sEmptyTable": "Data Jadwal Registrasi Masih Kosong"
       },
       "processing": true, //Feature control the processing indicator.
       "serverSide": true, //Feature control DataTables' server-side processing mode.
-      "order": [], //Initial no order.
+      "order": [
+        [4, "asc"]
+      ], //Initial no order.
 
       // Load data for the table's content from an Ajax source
       "ajax": {
-        "url": "<?php echo site_url('tahun_angkatan/ajax_list') ?>",
+        "url": "<?php echo site_url('jadwal_registrasi/ajax_list') ?>",
         "type": "POST"
       },
       //Set column definition initialisation properties.
       "columnDefs": [{
-        "targets": [0, 1, 2],
+        "targets": [0, 1, 2, 3, 4, 5],
         "className": 'text-center'
+      }, {
+        "targets": [-1], //last column
+        "render": function(data, type, row) {
+          if (row[4] == "N") {
+            return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit_jadwal(" + row[5] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-danger\" href=\"javascript:void(0)\" title=\"Delete\" onclick=\"delete_jadwal(" + row[5] + ")\"><i class=\"fas fa-trash\"></i> Hapus</a></div>"
+          } else {
+            return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit_jadwal(" + row[5] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div>";
+          }
+
+        },
+        "orderable": false, //set not orderable
       }, {
         "searchable": false,
         "orderable": false,
         "targets": 0
       }, {
-        "targets": [-1], //last column
+        "targets": [-2], //last column
         "render": function(data, type, row) {
-          return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit_angkatan(" + row[2] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-danger\" href=\"javascript:void(0)\" title=\"Delete\" onclick=\"delete_angkatan(" + row[2] + ")\"><i class=\"fas fa-trash\"></i> Hapus</a></div>";
-        },
-        "orderable": false, //set not orderable
-      }, ],
+          if (row[4] == "N") {
+            return "<div class=\"badge bg-danger text-white text-wrap\">Non-Aktif</div>"
+          } else {
+            return "<div class=\"badge bg-success text-white text-wrap\">Aktif</div>";
+          }
+        }
+      }],
     });
     $("input").change(function() {
       $(this).parent().parent().removeClass('has-error');
@@ -64,8 +80,7 @@
   });
 
   //delete
-  function delete_angkatan(id) {
-
+  function delete_jadwal(id) {
     Swal.fire({
       title: 'Konfirmasi Hapus Data',
       text: "Apakah Anda Yakin Ingin Menghapus Data Ini ?",
@@ -78,9 +93,9 @@
     }).then((result) => {
       if (result.value) {
         $.ajax({
-          url: "<?php echo site_url('tahun_angkatan/delete'); ?>",
+          url: "<?php echo site_url('jadwal_registrasi/delete'); ?>",
           type: "POST",
-          data: "id_angkatan=" + id,
+          data: "id_jadwal_registrasi=" + id,
           cache: false,
           dataType: 'json',
           success: function(respone) {
@@ -88,7 +103,7 @@
               reload_table();
               Swal.fire({
                 icon: 'success',
-                title: 'Tahun Angkatan Berhasil Dihapus!'
+                title: 'Jadwal Registrasi Berhasil Dihapus!'
               });
             } else {
               Toast.fire({
@@ -108,16 +123,16 @@
     })
   }
 
-  function add_angkatan() {
+  function add_jadwal() {
     save_method = 'add';
     $('#form')[0].reset(); // reset form on modals
     $('.form-group').removeClass('has-error'); // clear error class
     $('.help-block').empty(); // clear error string
     $('#modal_form').modal('show'); // show bootstrap modal
-    $('.modal-title').text('Tambah Tahun Angkatan'); // Set Title to Bootstrap modal title
+    $('.modal-title').text('Tambah Jadwal Registrasi'); // Set Title to Bootstrap modal title
   }
 
-  function edit_angkatan(id) {
+  function edit_jadwal(id) {
     save_method = 'update';
     $('#form')[0].reset(); // reset form on modals
     $('.form-group').removeClass('has-error'); // clear error class
@@ -125,15 +140,18 @@
 
     //Ajax Load data from ajax
     $.ajax({
-      url: "<?php echo site_url('tahun_angkatan/get_angkatan') ?>/" + id,
+      url: "<?php echo site_url('jadwal_registrasi/get_jadwal_registrasi') ?>/" + id,
       type: "GET",
       dataType: "JSON",
       success: function(data) {
 
-        $('[name="id_angkatan"]').val(data.id_angkatan);
-        $('[name="thn_angkatan"]').val(data.tahun_angkatan);
+        $('[name="id_jadwal_registrasi"]').val(data.id_jadwal_registrasi);
+        $('[name="thn_akademik"]').val(data.tahun_akademik);
+        $('[name="tgl_mulai"]').val(data.tanggal_mulai);
+        $('[name="tgl_akhir"]').val(data.tanggal_akhir);
+        $('[name="status"]').val(data.status);
         $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
-        $('.modal-title').text('Ubah Tahun Angkatan'); // Set title to Bootstrap modal title
+        $('.modal-title').text('Ubah Jadwal Registrasi'); // Set title to Bootstrap modal title
 
       },
       error: function(jqXHR, textStatus, errorThrown) {
@@ -148,9 +166,9 @@
     var url;
 
     if (save_method == 'add') {
-      url = "<?php echo site_url('tahun_angkatan/insert') ?>";
+      url = "<?php echo site_url('jadwal_registrasi/insert') ?>";
     } else {
-      url = "<?php echo site_url('tahun_angkatan/update') ?>";
+      url = "<?php echo site_url('jadwal_registrasi/update') ?>";
     }
 
     // ajax adding data to database
@@ -168,12 +186,12 @@
           if (save_method == 'add') {
             Toast.fire({
               icon: 'success',
-              title: 'Tahun Angkatan Berhasil Disimpan!'
+              title: 'Jadwal Registrasi Berhasil Disimpan!'
             });
           } else if (save_method == 'update') {
             Toast.fire({
               icon: 'success',
-              title: 'Tahun Angkatan Berhasil Diubah!'
+              title: 'Jadwal Registrasi Berhasil Diubah!'
             });
           }
         } else {
@@ -184,7 +202,6 @@
           }
         }
         $('#btnSave').text('Simpan'); //change button text
-        $('#btnCancel').text('Batal'); //change button text
         $('#btnSave').attr('disabled', false); //set button enable 
 
 
@@ -192,7 +209,6 @@
       error: function(jqXHR, textStatus, errorThrown) {
         alert('Error adding / update data');
         $('#btnSave').text('Simpan'); //change button text
-        $('#btnCancel').text('Batal'); //change button text
         $('#btnSave').attr('disabled', false); //set button enable 
 
       }

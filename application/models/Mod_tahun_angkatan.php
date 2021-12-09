@@ -6,7 +6,7 @@ class Mod_tahun_angkatan extends CI_Model
     var $table = 'tbl_tahun_angkatan';
     var $column_order = array('', 'tahun_angkatan');
     var $column_search = array('tahun_angkatan');
-    var $order = array('id_angkatan' => 'asc'); // default order 
+    var $order = array('id_angkatan' => 'desc'); // default order 
 
     public function __construct()
     {
@@ -72,6 +72,12 @@ class Mod_tahun_angkatan extends CI_Model
     {
         $this->db->where('id_angkatan', $id);
         return $this->db->get($this->table)->row();
+    }
+
+    function get_all()
+    {
+        return $this->db->get($this->table)
+            ->result();
     }
 
     function insert($data)

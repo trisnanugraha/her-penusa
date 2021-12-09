@@ -16,7 +16,7 @@
 
             // Load data for the table's content from an Ajax source
             "ajax": {
-                "url": "<?php echo site_url('programstudi/ajax_list') ?>",
+                "url": "<?php echo site_url('program_studi/ajax_list') ?>",
                 "type": "POST"
             },
             //Set column definition initialisation properties.
@@ -82,7 +82,7 @@
         }).then((result) => {
             if (result.value) {
                 $.ajax({
-                    url: "<?php echo site_url('programstudi/delete'); ?>",
+                    url: "<?php echo site_url('program_studi/delete'); ?>",
                     type: "POST",
                     data: "id_prodi=" + id,
                     cache: false,
@@ -129,7 +129,7 @@
 
         //Ajax Load data from ajax
         $.ajax({
-            url: "<?php echo site_url('programstudi/edit') ?>/" + id,
+            url: "<?php echo site_url('program_studi/edit') ?>/" + id,
             type: "GET",
             dataType: "JSON",
             success: function(data) {
@@ -152,9 +152,9 @@
         var url;
 
         if (save_method == 'add') {
-            url = "<?php echo site_url('programstudi/insert') ?>";
+            url = "<?php echo site_url('program_studi/insert') ?>";
         } else {
-            url = "<?php echo site_url('programstudi/update') ?>";
+            url = "<?php echo site_url('program_studi/update') ?>";
         }
 
         // ajax adding data to database
