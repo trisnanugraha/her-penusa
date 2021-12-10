@@ -28,6 +28,22 @@ class Mod_login extends CI_Model
         return $this->db->get_where('tbl_mahasiswa', array('nim' => $nim));
     }
 
+    function get_role($username)
+    {
+        $this->db->select('b.nama_level');
+        $this->db->join('tbl_userlevel b', 'a.id_level = b.id_level');
+        $this->db->where('username', $username);
+        return $this->db->get('tbl_user a');
+    }
+
+    function get_role_mhs($nim)
+    {
+        $this->db->select('b.nama_level');
+        $this->db->join('tbl_userlevel b', 'a.id_level = b.id_level');
+        $this->db->where('nim', $nim);
+        return $this->db->get('tbl_mahasiswa a');
+    }
+
     function get_prodi($username)
     {
         $this->db->select('b.nama_prodi');

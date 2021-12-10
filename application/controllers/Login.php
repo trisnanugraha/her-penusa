@@ -33,6 +33,7 @@ class Login extends CI_Controller
                 $db = $this->Mod_login->check_mhs($nim)->row();
                 $apl = $this->Mod_login->Aplikasi()->row();
                 $prodi = $this->Mod_login->get_prodi_mhs($nim)->row();
+                $role = $this->Mod_login->get_role_mhs($nim)->row();
 
                 if (hash_verified(anti_injection($this->input->post('password')), $db->password)) {
                     //cek username dan password yg ada di database
@@ -42,6 +43,7 @@ class Login extends CI_Controller
                         'username'    => $db->nim,
                         'password'    => $db->password,
                         'id_level'    => $db->id_level,
+                        'role'        => $role->nama_level,
                         'aplikasi'    => $apl->nama_aplikasi,
                         'title'       => $apl->title,
                         'logo'        => $apl->logo,

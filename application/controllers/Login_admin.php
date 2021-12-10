@@ -34,6 +34,7 @@ class Login_admin extends CI_Controller
                 $db = $this->Mod_login->check_db($username)->row();
                 $apl = $this->Mod_login->Aplikasi()->row();
                 $prodi = $this->Mod_login->get_prodi($username)->row();
+                $role = $this->Mod_login->get_role($username)->row();
 
                 if (hash_verified(anti_injection($this->input->post('password')), $db->password)) {
                     //cek username dan password yg ada di database
@@ -44,6 +45,7 @@ class Login_admin extends CI_Controller
                         'full_name'   => ucfirst($db->full_name),
                         'password'    => $db->password,
                         'id_level'    => $db->id_level,
+                        'role'        => $role->nama_level,
                         'aplikasi'    => $apl->nama_aplikasi,
                         'title'       => $apl->title,
                         'logo'        => $apl->logo,

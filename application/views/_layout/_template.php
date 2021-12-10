@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title><?php echo $this->session->userdata['title']; ?> | <?php echo  $this->session->userdata['username']; ?></title>
+    <title><?php echo $this->session->userdata['title']; ?> | <?php echo  $this->session->userdata['role']; ?></title>
     <!-- meta -->
     <?php echo @$_meta; ?>
     <!-- css -->
