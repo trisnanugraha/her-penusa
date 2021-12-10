@@ -35,7 +35,7 @@
   <!-- /.container-fluid -->
 </section>
 
-<?php echo $modal_tambah_hak_akses; ?>
+<?php echo $modal; ?>
 
 <div class="modal fade" id="modal-default">
   <div class="modal-dialog">

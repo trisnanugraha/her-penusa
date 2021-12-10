@@ -16,7 +16,7 @@
 
       // Load data for the table's content from an Ajax source
       "ajax": {
-        "url": "<?php echo site_url('userlevel/ajax_list') ?>",
+        "url": "<?php echo site_url('hak_akses/ajax_list') ?>",
         "type": "POST"
       },
       //Set column definition initialisation properties.
@@ -79,7 +79,7 @@
     });
     $(".modal-dialog").addClass('modal-xl');
     $.ajax({
-      url: '<?php echo base_url('userlevel/view_akses_menu'); ?>',
+      url: '<?php echo base_url('hak_akses/view_akses_menu'); ?>',
       type: 'post',
       data: 'id=' + id,
       success: function(respon) {
@@ -96,7 +96,7 @@
     });
     $(".modal-dialog").addClass('modal-xl');
     $.ajax({
-      url: '<?php echo base_url('userlevel/view_akses_submenu'); ?>',
+      url: '<?php echo base_url('hak_akses/view_akses_submenu'); ?>',
       type: 'post',
       data: 'id=' + id,
       success: function(respon) {
@@ -109,7 +109,7 @@
     $('.modal-title').text('View Level');
     $("#modal-default").modal('show');
     $.ajax({
-      url: '<?php echo base_url('userlevel/view'); ?>',
+      url: '<?php echo base_url('hak_akses/view'); ?>',
       type: 'post',
       data: 'table=tbl_userlevel&id=' + id,
       success: function(respon) {
@@ -132,7 +132,7 @@
     }).then((result) => {
       if (result.value) {
         $.ajax({
-          url: "<?php echo site_url('userlevel/delete'); ?>",
+          url: "<?php echo site_url('hak_akses/delete'); ?>",
           type: "POST",
           data: "id=" + id,
           cache: false,
@@ -183,7 +183,7 @@
 
     //Ajax Load data from ajax
     $.ajax({
-      url: "<?php echo site_url('userlevel/edit') ?>/" + id,
+      url: "<?php echo site_url('hak_akses/edit') ?>/" + id,
       type: "GET",
       dataType: "JSON",
       success: function(data) {
@@ -206,9 +206,9 @@
     var url;
 
     if (save_method == 'add') {
-      url = "<?php echo site_url('userlevel/insert') ?>";
+      url = "<?php echo site_url('hak_akses/insert') ?>";
     } else {
-      url = "<?php echo site_url('userlevel/update') ?>";
+      url = "<?php echo site_url('hak_akses/update') ?>";
     }
 
     // ajax adding data to database

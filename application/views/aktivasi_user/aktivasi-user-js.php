@@ -17,7 +17,7 @@
 
             // Load data for the table's content from an Ajax source
             "ajax": {
-                "url": "<?php echo site_url('aktivasiuser/ajax_list') ?>",
+                "url": "<?php echo site_url('aktivasi_user/ajax_list') ?>",
                 "type": "POST"
             },
             //Set column definition initialisation properties.
@@ -65,7 +65,7 @@
         }).then((result) => {
             if (result.value) {
                 $.ajax({
-                    url: "<?php echo site_url('aktivasiuser/aktivasi'); ?>",
+                    url: "<?php echo site_url('aktivasi_user/aktivasi'); ?>",
                     type: "POST",
                     data: "id_pending_user=" + id,
                     cache: false,

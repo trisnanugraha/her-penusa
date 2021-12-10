@@ -11,7 +11,7 @@ class Menu extends MY_Controller
     {
         parent::__construct();
         $this->load->model(array('Mod_menu'));
-        $this->load->model(array('Mod_userlevel'));
+        $this->load->model(array('Mod_hak_akses'));
     }
 
     public function index()
@@ -87,7 +87,7 @@ class Menu extends MY_Controller
         // $id_level = $this->session->userdata['id_level'];
         $nama_menu = $this->input->post('nama_menu');
         $get_id = $this->Mod_menu->get_nama_menu($nama_menu);
-        $levels = $this->Mod_userlevel->getAll()->result();
+        $levels = $this->Mod_hak_akses->getAll()->result();
         foreach ($levels as $row) {
             $data = array(
                 'id_menu'   => $get_id->id_menu,
@@ -120,7 +120,7 @@ class Menu extends MY_Controller
         $id_menu = $this->input->post('id_menu');
         $this->Mod_menu->deleteMenu($id_menu, 'tbl_menu');
         $this->Mod_menu->deleteakses($id_menu, 'tbl_akses_menu');
-        $ceksubmenu = $this->Mod_userlevel->getIdsubmenu($id_menu)->result();
+        $ceksubmenu = $this->Mod_hak_akses->getIdsubmenu($id_menu)->result();
         foreach ($ceksubmenu as $row) {
             $idsubmenu = $row->id_submenu;
             $this->Mod_menu->deleteakses_submenu($idsubmenu, 'tbl_akses_submenu');

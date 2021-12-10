@@ -11,7 +11,7 @@ class Submenu extends MY_Controller
     {
         parent::__construct();
         $this->load->model(array('Mod_submenu', 'Mod_menu'));
-        $this->load->model(array('Mod_userlevel'));
+        $this->load->model(array('Mod_hak_akses'));
     }
 
     public function index()
@@ -92,7 +92,7 @@ class Submenu extends MY_Controller
         /*$nama_submenu = $this->input->post('nama_submenu');
  $get_id= $this->Mod_submenu->get_by_nama($nama_submenu);*/
         $id_level = $this->session->userdata['id_level'];
-        $levels = $this->Mod_userlevel->getAll()->result();
+        $levels = $this->Mod_hak_akses->getAll()->result();
         foreach ($levels as $row) {
             $data = array(
                 'id_submenu' => $insert_id,

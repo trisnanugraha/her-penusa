@@ -148,11 +148,11 @@
   function checked(id, level) {
     $.ajax({
       type: 'POST',
-      url: '<?= base_url('userlevel/update_akses') ?>',
+      url: '<?= base_url('hak_akses/update_akses') ?>',
       data: 'chek=checked&id=' + id,
       success: function(data) {
         $.ajax({
-          url: '<?php echo base_url('userlevel/view_akses_menu'); ?>',
+          url: '<?php echo base_url('hak_akses/view_akses_menu'); ?>',
           type: 'post',
           data: 'id=' + level,
           success: function(respon) {
@@ -166,12 +166,12 @@
   function unchecked(id, level) {
     $.ajax({
       type: 'POST',
-      url: '<?= base_url('userlevel/update_akses') ?>',
+      url: '<?= base_url('hak_akses/update_akses') ?>',
       data: 'chek=unchecked&id=' + id,
       success: function(data) {
 
         $.ajax({
-          url: '<?php echo base_url('userlevel/view_akses_menu'); ?>',
+          url: '<?php echo base_url('hak_akses/view_akses_menu'); ?>',
           type: 'post',
           data: 'id=' + level,
           success: function(respon) {
@@ -185,11 +185,11 @@
   function vchecked(id, level) {
     $.ajax({
       type: 'POST',
-      url: '<?= base_url('userlevel/view_akses') ?>',
+      url: '<?= base_url('hak_akses/view_akses') ?>',
       data: 'chek=checked&id=' + id,
       success: function(data) {
         $.ajax({
-          url: '<?php echo base_url('userlevel/view_akses_menu'); ?>',
+          url: '<?php echo base_url('hak_akses/view_akses_menu'); ?>',
           type: 'post',
           data: 'id=' + level,
           success: function(respon) {
@@ -203,11 +203,11 @@
   function vunchecked(id, level) {
     $.ajax({
       type: 'POST',
-      url: '<?= base_url('userlevel/view_akses') ?>',
+      url: '<?= base_url('hak_akses/view_akses') ?>',
       data: 'chek=unchecked&id=' + id,
       success: function(data) {
         $.ajax({
-          url: '<?php echo base_url('userlevel/view_akses_menu'); ?>',
+          url: '<?php echo base_url('hak_akses/view_akses_menu'); ?>',
           type: 'post',
           data: 'id=' + level,
           success: function(respon) {
@@ -221,11 +221,11 @@
   function addchecked(id, level) {
     $.ajax({
       type: 'POST',
-      url: '<?= base_url('userlevel/add_akses') ?>',
+      url: '<?= base_url('hak_akses/add_akses') ?>',
       data: 'chek=checked&id=' + id,
       success: function(data) {
         $.ajax({
-          url: '<?php echo base_url('userlevel/view_akses_menu'); ?>',
+          url: '<?php echo base_url('hak_akses/view_akses_menu'); ?>',
           type: 'post',
           data: 'id=' + level,
           success: function(respon) {
@@ -239,11 +239,11 @@
   function addunchecked(id, level) {
     $.ajax({
       type: 'POST',
-      url: '<?= base_url('userlevel/add_akses') ?>',
+      url: '<?= base_url('hak_akses/add_akses') ?>',
       data: 'chek=unchecked&id=' + id,
       success: function(data) {
         $.ajax({
-          url: '<?php echo base_url('userlevel/view_akses_menu'); ?>',
+          url: '<?php echo base_url('hak_akses/view_akses_menu'); ?>',
           type: 'post',
           data: 'id=' + level,
           success: function(respon) {
@@ -257,11 +257,11 @@
   function editchecked(id, level) {
     $.ajax({
       type: 'POST',
-      url: '<?= base_url('userlevel/edit_akses') ?>',
+      url: '<?= base_url('hak_akses/edit_akses') ?>',
       data: 'chek=checked&id=' + id,
       success: function(data) {
         $.ajax({
-          url: '<?php echo base_url('userlevel/view_akses_menu'); ?>',
+          url: '<?php echo base_url('hak_akses/view_akses_menu'); ?>',
           type: 'post',
           data: 'id=' + level,
           success: function(respon) {
@@ -275,11 +275,11 @@
   function editunchecked(id, level) {
     $.ajax({
       type: 'POST',
-      url: '<?= base_url('userlevel/edit_akses') ?>',
+      url: '<?= base_url('hak_akses/edit_akses') ?>',
       data: 'chek=unchecked&id=' + id,
       success: function(data) {
         $.ajax({
-          url: '<?php echo base_url('userlevel/view_akses_menu'); ?>',
+          url: '<?php echo base_url('hak_akses/view_akses_menu'); ?>',
           type: 'post',
           data: 'id=' + level,
           success: function(respon) {
@@ -293,11 +293,11 @@
   function delchecked(id, level) {
     $.ajax({
       type: 'POST',
-      url: '<?= base_url('userlevel/delete_akses') ?>',
+      url: '<?= base_url('hak_akses/delete_akses') ?>',
       data: 'chek=checked&id=' + id,
       success: function(data) {
         $.ajax({
-          url: '<?php echo base_url('userlevel/view_akses_menu'); ?>',
+          url: '<?php echo base_url('hak_akses/view_akses_menu'); ?>',
           type: 'post',
           data: 'id=' + level,
           success: function(respon) {
@@ -311,11 +311,11 @@
   function delunchecked(id, level) {
     $.ajax({
       type: 'POST',
-      url: '<?= base_url('userlevel/delete_akses') ?>',
+      url: '<?= base_url('hak_akses/delete_akses') ?>',
       data: 'chek=unchecked&id=' + id,
       success: function(data) {
         $.ajax({
-          url: '<?php echo base_url('userlevel/view_akses_menu'); ?>',
+          url: '<?php echo base_url('hak_akses/view_akses_menu'); ?>',
           type: 'post',
           data: 'id=' + level,
           success: function(respon) {
@@ -329,11 +329,11 @@
   function uplchecked(id, level) {
     $.ajax({
       type: 'POST',
-      url: '<?= base_url('userlevel/upload_akses') ?>',
+      url: '<?= base_url('hak_akses/upload_akses') ?>',
       data: 'chek=checked&id=' + id,
       success: function(data) {
         $.ajax({
-          url: '<?php echo base_url('userlevel/view_akses_menu'); ?>',
+          url: '<?php echo base_url('hak_akses/view_akses_menu'); ?>',
           type: 'post',
           data: 'id=' + level,
           success: function(respon) {
@@ -347,11 +347,11 @@
   function uplunchecked(id, level) {
     $.ajax({
       type: 'POST',
-      url: '<?= base_url('userlevel/upload_akses') ?>',
+      url: '<?= base_url('hak_akses/upload_akses') ?>',
       data: 'chek=unchecked&id=' + id,
       success: function(data) {
         $.ajax({
-          url: '<?php echo base_url('userlevel/view_akses_menu'); ?>',
+          url: '<?php echo base_url('hak_akses/view_akses_menu'); ?>',
           type: 'post',
           data: 'id=' + level,
           success: function(respon) {
@@ -365,11 +365,11 @@
   function printchecked(id, level) {
     $.ajax({
       type: 'POST',
-      url: '<?= base_url('userlevel/print_akses') ?>',
+      url: '<?= base_url('hak_akses/print_akses') ?>',
       data: 'chek=checked&id=' + id,
       success: function(data) {
         $.ajax({
-          url: '<?php echo base_url('userlevel/view_akses_menu'); ?>',
+          url: '<?php echo base_url('hak_akses/view_akses_menu'); ?>',
           type: 'post',
           data: 'id=' + level,
           success: function(respon) {
@@ -383,11 +383,11 @@
   function printunchecked(id, level) {
     $.ajax({
       type: 'POST',
-      url: '<?= base_url('userlevel/print_akses') ?>',
+      url: '<?= base_url('hak_akses/print_akses') ?>',
       data: 'chek=unchecked&id=' + id,
       success: function(data) {
         $.ajax({
-          url: '<?php echo base_url('userlevel/view_akses_menu'); ?>',
+          url: '<?php echo base_url('hak_akses/view_akses_menu'); ?>',
           type: 'post',
           data: 'id=' + level,
           success: function(respon) {

@@ -9,3 +9,5 @@ $route['panel-admin'] = 'Login_admin/index';
 $route['jadwal-registrasi'] = 'Jadwal_registrasi/index';
 $route['tahun-angkatan'] = 'Tahun_angkatan/index';
 $route['program-studi'] = 'Program_studi/index';
+$route['hak-akses'] = 'Hak_akses/index';
+$route['aktivasi-user'] = 'Aktivasi_user/index';
