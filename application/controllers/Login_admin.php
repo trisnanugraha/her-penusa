@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Login extends CI_Controller
+class Login_admin extends CI_Controller
 {
 
     public function __construct()
@@ -17,44 +17,48 @@ class Login extends CI_Controller
             redirect('dashboard');
         } else {
             $aplikasi['aplikasi'] = $this->Mod_login->Aplikasi()->row();
-            $this->load->view('login', $aplikasi);
+            $this->load->view('admin/login', $aplikasi);
         }
     } //end function index
 
     function login()
     {
-        $this->_validate();
-        //cek nim database
-        $nim = anti_injection($this->input->post('nim'));
-        $status = $this->Mod_login->check_status_mhs($nim);
 
-        if ($this->Mod_login->check_mhs($nim)->num_rows() == 1) {
-            if ($status->status != 'N') {
-                $db = $this->Mod_login->check_mhs($nim)->row();
+        $this->_validate();
+        //cek username database
+        $username = anti_injection($this->input->post('username'));
+        $status = $this->Mod_login->check_status($username);
+
+        if ($this->Mod_login->check_db($username)->num_rows() == 1) {
+            if ($status->is_active != 'N') {
+                $db = $this->Mod_login->check_db($username)->row();
                 $apl = $this->Mod_login->Aplikasi()->row();
-                $prodi = $this->Mod_login->get_prodi_mhs($nim)->row();
+                $prodi = $this->Mod_login->get_prodi($username)->row();
 
                 if (hash_verified(anti_injection($this->input->post('password')), $db->password)) {
                     //cek username dan password yg ada di database
                     $userdata = array(
-                        'id_user'     => $db->id_mahasiswa,
-                        'full_name'   => ucfirst($db->nama_lengkap),
-                        'username'    => $db->nim,
+                        'id_user'  => $db->id_user,
+                        'username'    => ucfirst($db->username),
+                        'user_name'    => $db->username,
+                        'full_name'   => ucfirst($db->full_name),
                         'password'    => $db->password,
                         'id_level'    => $db->id_level,
                         'aplikasi'    => $apl->nama_aplikasi,
                         'title'       => $apl->title,
                         'logo'        => $apl->logo,
-                        'nama_owner'  => $apl->nama_owner,
-                        'image'       => $db->pass_foto,
+                        'nama_owner'     => $apl->nama_owner,
+                        'image'       => $db->image,
                         'prodi'       => $prodi->nama_prodi,
-                        'logged_in'   => TRUE
+                        'logged_in'    => TRUE
                     );
+
                     $this->session->set_userdata($userdata);
                     $data['status'] = TRUE;
                     echo json_encode($data);
                 } else {
-                    $data['pesan'] = "NIM atau Password Salah!";
+
+                    $data['pesan'] = "Username atau Password Salah!";
                     $data['error'] = TRUE;
                     echo json_encode($data);
                 }
@@ -86,9 +90,9 @@ class Login extends CI_Controller
         $data['inputerror'] = array();
         $data['status'] = TRUE;
 
-        if ($this->input->post('nim') == '') {
-            $data['inputerror'][] = 'nim';
-            $data['error_string'][] = 'NIM Tidak Boleh Kosong';
+        if ($this->input->post('username') == '') {
+            $data['inputerror'][] = 'username';
+            $data['error_string'][] = 'Username Tidak Boleh Kosong';
             $data['status'] = FALSE;
         }
 

@@ -37,9 +37,9 @@
       <div class="card-body">
         <p class="login-box-msg">Silakan masuk untuk akses sistem ini</p>
         <form action="" role="form" id="loginform" method="post">
-          <label for="nim">NIM</label>
+          <label for="username">Username</label>
           <div class="input-group mb-3 kosong">
-            <input type="text" name="nim" class="form-control" placeholder="NIM" value="<?php echo set_value('nim'); ?>">
+            <input type="text" name="username" class="form-control" placeholder="Username" value="<?php echo set_value('username'); ?>">
             <div class="input-group-append">
               <div class="input-group-text">
                 <span class="fas fa-user"></span>
@@ -137,7 +137,7 @@
       //prevent Default functionality
       e.preventDefault();
       $.ajax({
-        url: '<?php echo base_url('login/login') ?>',
+        url: '<?php echo base_url('login_admin/login') ?>',
         type: 'POST',
         data: $('#loginform').serialize(),
         dataType: 'JSON',

@@ -23,6 +23,11 @@ class Mod_login extends CI_Model
         return $this->db->get_where('tbl_user', array('username' => $username));
     }
 
+    function check_mhs($nim)
+    {
+        return $this->db->get_where('tbl_mahasiswa', array('nim' => $nim));
+    }
+
     function get_prodi($username)
     {
         $this->db->select('b.nama_prodi');
@@ -31,11 +36,26 @@ class Mod_login extends CI_Model
         return $this->db->get('tbl_user a');
     }
 
+    function get_prodi_mhs($nim)
+    {
+        $this->db->select('b.nama_prodi');
+        $this->db->join('tbl_program_studi b', 'a.id_prodi = b.id_prodi');
+        $this->db->where('nim', $nim);
+        return $this->db->get('tbl_mahasiswa a');
+    }
+
     function check_status($username)
     {
         $this->db->select('is_active');
         $this->db->where('username', $username);
         return $this->db->get('tbl_user')->row();
+    }
+
+    function check_status_mhs($nim)
+    {
+        $this->db->select('status');
+        $this->db->where('nim', $nim);
+        return $this->db->get('tbl_mahasiswa')->row();
     }
 }
 
