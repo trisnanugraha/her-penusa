@@ -11,3 +11,5 @@ $route['tahun-angkatan'] = 'Tahun_angkatan/index';
 $route['program-studi'] = 'Program_studi/index';
 $route['hak-akses'] = 'Hak_akses/index';
 $route['aktivasi-user'] = 'Aktivasi_user/index';
+$route['data-registrasi'] = 'Data_registrasi/index';
+$route['validasi-sertifikat'] = 'Validasi_sertifikat/index';
