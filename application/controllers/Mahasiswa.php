@@ -238,6 +238,17 @@ class Mahasiswa extends MY_Controller
         echo json_encode(array("status" => TRUE));
     }
 
+    public function reset_pass()
+    {
+        $id = $this->input->post('id');
+        $data = array(
+            'password'  => get_hash('password123')
+        );
+        $this->Mod_mahasiswa->reset_pass($id, $data);
+        $data['status'] = TRUE;
+        echo json_encode($data);
+    }
+
     public function download()
     {
 

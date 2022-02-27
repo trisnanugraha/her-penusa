@@ -18,7 +18,7 @@
 
       // Load data for the table's content from an Ajax source
       "ajax": {
-        "url": "<?php echo site_url('jadwal/ajax_list') ?>",
+        "url": "<?php echo site_url('jadwal_registrasi/ajax_list') ?>",
         "type": "POST"
       },
       //Set column definition initialisation properties.
@@ -56,6 +56,7 @@
       $(this).next().empty();
       $(this).removeClass('is-invalid');
     });
+    
     $("textarea").change(function() {
       $(this).parent().parent().removeClass('has-error');
       $(this).next().empty();
@@ -93,9 +94,9 @@
     }).then((result) => {
       if (result.value) {
         $.ajax({
-          url: "<?php echo site_url('jadwal/delete'); ?>",
+          url: "<?php echo site_url('jadwal_registrasi/delete'); ?>",
           type: "POST",
-          data: "id_jadwal=" + id,
+          data: "id_jadwal_registrasi=" + id,
           cache: false,
           dataType: 'json',
           success: function(respone) {
@@ -140,12 +141,12 @@
 
     //Ajax Load data from ajax
     $.ajax({
-      url: "<?php echo site_url('jadwal/get_jadwal') ?>/" + id,
+      url: "<?php echo site_url('jadwal_registrasi/get_jadwal_registrasi') ?>/" + id,
       type: "GET",
       dataType: "JSON",
       success: function(data) {
 
-        $('[name="id_jadwal"]').val(data.id_jadwal);
+        $('[name="id_jadwal_registrasi"]').val(data.id_jadwal_registrasi);
         $('[name="thn_akademik"]').val(data.tahun_akademik);
         $('[name="tgl_mulai"]').val(data.tanggal_mulai);
         $('[name="tgl_akhir"]').val(data.tanggal_akhir);
@@ -166,9 +167,9 @@
     var url;
 
     if (save_method == 'add') {
-      url = "<?php echo site_url('jadwal/insert') ?>";
+      url = "<?php echo site_url('jadwal_registrasi/insert') ?>";
     } else {
-      url = "<?php echo site_url('jadwal/update') ?>";
+      url = "<?php echo site_url('jadwal_registrasi/update') ?>";
     }
 
     // ajax adding data to database

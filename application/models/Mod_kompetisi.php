@@ -1,12 +1,13 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Mod_jadwal extends CI_Model
+class Mod_kompetisi extends CI_Model
 {
-    var $table = 'tbl_jadwal';
-    var $column_order = array('', 'tahun_akademik', 'tanggal_mulai', 'tanggal_akhir', 'status');
-    var $column_search = array('tahun_akademik', 'tanggal_mulai', 'tanggal_akhir', 'status');
-    var $order = array('id_jadwal' => 'asc'); // default order 
+
+    var $table = 'tbl_kompetisi';
+    var $column_order = array('', 'nama_kompetisi', 'tingkat_prestasi', 'tanggal_mulai', 'tanggal_akhir', 'status');
+    var $column_search = array('nama_kompetisi', 'tingkat_prestasi', 'tanggal_mulai', 'tanggal_akhir', 'status');
+    var $order = array('id_kompetisi' => 'desc'); // default order 
 
     public function __construct()
     {
@@ -64,13 +65,20 @@ class Mod_jadwal extends CI_Model
 
     public function count_all()
     {
+
         $this->db->from($this->table);
         return $this->db->count_all_results();
     }
 
-    function get_jadwal_by_id($id)
+    function get_all()
     {
-        $this->db->where('id_jadwal', $id);
+        return $this->db->get($this->table)
+            ->result();
+    }
+
+    function get_kompetisi_by_id($id)
+    {
+        $this->db->where('id_kompetisi', $id);
         return $this->db->get($this->table)->row();
     }
 
@@ -82,15 +90,15 @@ class Mod_jadwal extends CI_Model
 
     function update($id, $data)
     {
-        $this->db->where('id_jadwal', $id);
+        $this->db->where('id_kompetisi', $id);
         $this->db->update($this->table, $data);
     }
 
     function delete($id)
     {
-        $this->db->where('id_jadwal', $id);
+        $this->db->where('id_kompetisi', $id);
         $this->db->delete($this->table);
     }
 }
 
-/* End of file Mod_jadwal.php */
+/* End of file Mod_kompetisi.php */

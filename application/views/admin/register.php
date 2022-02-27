@@ -96,7 +96,7 @@
                     <div class="form-group row">
                         <label for="judul" class="col-sm-4 col-form-label">Hak Akses</label>
                         <div class="col-sm-8 kosong">
-                            <select class="form-control" name="level">
+                            <select class="form-control level" name="level">
                                 <option value="" selected disabled>-- Pilih Hak Akses --</option>
                                 <?php
                                 foreach ($user_level as $level) { ?>

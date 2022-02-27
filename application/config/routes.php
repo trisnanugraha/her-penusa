@@ -13,3 +13,5 @@ $route['hak-akses'] = 'Hak_akses/index';
 $route['aktivasi-user'] = 'Aktivasi_user/index';
 $route['data-registrasi'] = 'Data_registrasi/index';
 $route['validasi-sertifikat'] = 'Validasi_sertifikat/index';
+$route['validasi-beasiswa'] = 'Validasi_beasiswa/index';
+$route['validasi-kompetisi'] = 'Validasi_kompetisi/index';

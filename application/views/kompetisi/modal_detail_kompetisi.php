@@ -12,35 +12,29 @@
             </div>
             <div class="modal-body form">
                 <form action="#" id="form" class="form-horizontal">
-                    <input type="hidden" value="" name="id_sertifikat" />
+                    <input type="hidden" value="" name="id_kompetisi" />
                     <div class="form-group row ">
-                        <label for="nama_sertifikat" class="col-sm-2 col-form-label">Nama Sertifikat</label>
-                        <div class="col-sm-10 kosong">
-                            <p class="form-control my-0" name="nama_sertifikat" id="nama_sertifikat"></p>
+                        <label for="nama_kompetisi" class="col-sm-2 col-form-label">Kompetisi</label>
+                        <div class="col-sm-10">
+                            <p class="form-control my-0" name="nama_kompetisi" id="nama_kompetisi"></p>
                         </div>
                     </div>
                     <div class="form-group row ">
-                        <label for="nomor_sertifikat" class="col-sm-2 col-form-label">Nomor</label>
-                        <div class="col-sm-10 kosong">
-                            <p class="form-control my-0" name="nomor_sertifikat" id="nomor_sertifikat"></p>
+                        <label for="tingkat_prestasi" class="col-sm-2 col-form-label">Tingkat Prestasi</label>
+                        <div class="col-sm-10">
+                            <p class="form-control my-0" name="tingkat_prestasi" id="tingkat_prestasi"></p>
                         </div>
                     </div>
                     <div class="form-group row ">
-                        <label for="tanggal_sertifikat" class="col-sm-2 col-form-label">Tanggal</label>
-                        <div class="col-sm-10 kosong">
-                            <p class="form-control my-0" name="tanggal_sertifikat" id="tanggal_sertifikat"></p>
+                        <label for="tanggal_mulai" class="col-sm-2 col-form-label">Tanggal Mulai</label>
+                        <div class="col-sm-10">
+                            <p class="form-control my-0" name="tanggal_mulai" id="tanggal_mulai"></p>
                         </div>
                     </div>
                     <div class="form-group row ">
-                        <label for="nama_lsp" class="col-sm-2 col-form-label">Nama LSP</label>
-                        <div class="col-sm-10 kosong">
-                            <p class="form-control my-0" name="nama_lsp" id="nama_lsp"></p>
-                        </div>
-                    </div>
-                    <div class="form-group row ">
-                        <label for="masa_berlaku" class="col-sm-2 col-form-label">Masa Berlaku</label>
-                        <div class="col-sm-10 kosong">
-                            <p class="form-control my-0" name="masa_berlaku" id="masa_berlaku"></p>
+                        <label for="tanggal_akhir" class="col-sm-2 col-form-label">Tanggal Akhir</label>
+                        <div class="col-sm-10">
+                            <p class="form-control my-0" name="tanggal_akhir" id="tanggal_akhir"></p>
                         </div>
                     </div>
 

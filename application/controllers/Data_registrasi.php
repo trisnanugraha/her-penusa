@@ -1,46 +1,46 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Jadwal extends CI_Controller
+class Data_registrasi extends CI_Controller
 {
 
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('Mod_jadwal');
+        $this->load->model('Mod_data_registrasi');
     }
 
     public function index()
     {
-        $data['judul'] = 'Jadwal Registrasi';
-        $data['modal'] = show_my_modal('jadwal/modal_jadwal', $data);
-        $js = $this->load->view('jadwal/jadwal-js', null, true);
-        $this->template->views('jadwal/home', $data, $js);
+        $data['judul'] = 'Data Registrasi';
+        $data['modal'] = show_my_modal('data_registrasi/modal_data_registrasi', $data);
+        $js = $this->load->view('data_registrasi/data-registrasi-js', null, true);
+        $this->template->views('data_registrasi/home', $data, $js);
     }
 
     public function ajax_list()
     {
         ini_set('memory_limit', '512M');
         set_time_limit(3600);
-        $list = $this->Mod_jadwal->get_datatables();
+        $list = $this->Mod_data_registrasi->get_datatables();
         $data = array();
         $no = $_POST['start'];
-        foreach ($list as $jadwal) {
+        foreach ($list as $data) {
             $no++;
             $row = array();
             $row[] = $no;
-            $row[] = $jadwal->tahun_akademik;
-            $row[] = $this->fungsi->tanggalindo($jadwal->tanggal_mulai);
-            $row[] = $this->fungsi->tanggalindo($jadwal->tanggal_akhir);
-            $row[] = $jadwal->status;
-            $row[] = $jadwal->id_jadwal;
+            $row[] = $data->tahun_akademik;
+            $row[] = $this->fungsi->tanggalindo($data->tanggal_mulai);
+            $row[] = $this->fungsi->tanggalindo($data->tanggal_akhir);
+            $row[] = $data->status;
+            $row[] = $data->id_jadwal_registrasi;
             $data[] = $row;
         }
 
         $output = array(
             "draw" => $_POST['draw'],
-            "recordsTotal" => $this->Mod_jadwal->count_all(),
-            "recordsFiltered" => $this->Mod_jadwal->count_filtered(),
+            "recordsTotal" => $this->Mod_data_registrasi->count_all(),
+            "recordsFiltered" => $this->Mod_data_registrasi->count_filtered(),
             "data" => $data,
         );
         //output to json format
@@ -56,34 +56,34 @@ class Jadwal extends CI_Controller
             'tanggal_akhir'     => $this->input->post('tgl_akhir'),
             'status'        => $this->input->post('status'),
         );
-        $this->Mod_jadwal->insert($save);
+        $this->Mod_jadwal_registrasi->insert($save);
         echo json_encode(array("status" => TRUE));
     }
 
-    public function get_jadwal($id)
+    public function get_jadwal_registrasi($id)
     {
-        $data = $this->Mod_jadwal->get_jadwal_by_id($id);
+        $data = $this->Mod_jadwal_registrasi->get_jadwal_registrasi_by_id($id);
         echo json_encode($data);
     }
 
     public function update()
     {
         $this->_validate();
-        $id      = $this->input->post('id_jadwal');
+        $id      = $this->input->post('id_jadwal_registrasi');
         $data  = array(
             'tahun_akademik'  => $this->input->post('thn_akademik'),
             'tanggal_mulai'     => $this->input->post('tgl_mulai'),
             'tanggal_akhir'     => $this->input->post('tgl_akhir'),
             'status'        => $this->input->post('status'),
         );
-        $this->Mod_jadwal->update($id, $data);
+        $this->Mod_jadwal_registrasi->update($id, $data);
         echo json_encode(array("status" => TRUE));
     }
 
     public function delete()
     {
-        $id = $this->input->post('id_jadwal');
-        $this->Mod_jadwal->delete($id);
+        $id = $this->input->post('id_jadwal_registrasi');
+        $this->Mod_jadwal_registrasi->delete($id);
         echo json_encode(array("status" => TRUE));
     }
 
@@ -125,4 +125,4 @@ class Jadwal extends CI_Controller
     }
 }
 
-/* End of file Jadwal.php */
+/* End of file Data_registrasi.php */

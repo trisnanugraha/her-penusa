@@ -1,13 +1,13 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Mod_mahasiswa extends CI_Model
+class Mod_validasi_beasiswa extends CI_Model
 {
 
-    var $table = 'tbl_mahasiswa';
-    var $column_order = array('', 'nim', 'nama_lengkap', 'nama_prodi', 'status');
-    var $column_search = array('nim', 'nama_lengkap', 'c.nama_prodi', 'status');
-    var $order = array('nim' => 'asc'); // default order 
+    var $table = 'tbl_beasiswa';
+    var $column_order = array('', 'b.nama_lengkap', 'a.nama_beasiswa', 'a.sumber_beasiswa', 'a.periode', 'a.status');
+    var $column_search = array('b.nama_lengkap', 'a.nama_beasiswa', 'a.sumber_beasiswa', 'a.periode', 'a.status');
+    var $order = array('id_beasiswa' => 'desc'); // default order 
 
     public function __construct()
     {
@@ -16,10 +16,10 @@ class Mod_mahasiswa extends CI_Model
     }
     private function _get_datatables_query()
     {
-        $this->db->select('a.*, c.nama_prodi');
-        // $this->db->join('tbl_userlevel b', 'a.id_level=b.id_level');
-        $this->db->join('tbl_program_studi c', 'a.id_prodi = c.id_prodi');
+        $this->db->select('a.*, b.nama_lengkap');
+        $this->db->join('tbl_mahasiswa b', 'a.id_mahasiswa = b.id_mahasiswa');
         $this->db->from("{$this->table} a");
+        // $this->db->where('a.id_ketua', $id);
 
         $i = 0;
 
@@ -76,64 +76,18 @@ class Mod_mahasiswa extends CI_Model
 
     function get_all()
     {
-        $this->db->select('a.*, b.nama_prodi, c.tahun_angkatan');
-        $this->db->join('tbl_program_studi b', 'a.id_prodi = b.id_prodi');
-        $this->db->join('tbl_tahun_angkatan c', 'a.id_angkatan = c.id_angkatan');
-        $this->db->order_by('a.id_mahasiswa asc');
-        return $this->db->get("{$this->table} a");
+        return $this->db->get($this->table)
+            ->result();
     }
 
-    function get_mhs_by_id($id)
+    function get_beasiswa_by_id($id)
     {
-        $this->db->where('id_mahasiswa', $id);
+        $this->db->select('a.*,b.nama_lengkap,b.nim');
+        $this->db->join('tbl_mahasiswa b', 'a.id_mahasiswa = b.id_mahasiswa');
+        $this->db->from("{$this->table} a");
+        $this->db->where('a.id_beasiswa', $id);
         return $this->db->get($this->table)->row();
-    }
-
-    function get_foto_mhs($id)
-    {
-        $this->db->select('pass_foto');
-        $this->db->from($this->table);
-        $this->db->where('id_mahasiswa', $id);
-        return $this->db->get();
-    }
-
-    function getuser($id_prodi)
-    {
-        $this->db->where('id_prodi', $id_prodi);
-        $this->db->where('is_active', 'Y');
-        $this->db->from('tbl_user');
-        return $this->db->count_all_results();
-    }
-
-    function cek_nim($nim)
-    {
-        $this->db->where('nim', $nim);
-        return $this->db->get($this->table);
-    }
-
-    function insert($data)
-    {
-        $insert = $this->db->insert($this->table, $data);
-        return $insert;
-    }
-
-    function update($id, $data)
-    {
-        $this->db->where('id_mahasiswa', $id);
-        $this->db->update($this->table, $data);
-    }
-
-    function delete($id)
-    {
-        $this->db->where('id_mahasiswa', $id);
-        $this->db->delete($this->table);
-    }
-
-    function reset_pass($id, $data)
-    {
-        $this->db->where('id_mahasiswa', $id);
-        $this->db->update($this->table, $data);
     }
 }
 
-/* End of file Mod_mahasiswa.php */
+/* End of file Mod_validasi_beasiswa.php */

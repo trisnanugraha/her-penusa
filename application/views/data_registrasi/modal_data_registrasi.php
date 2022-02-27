@@ -10,7 +10,7 @@
                 </button>
             </div>
             <form action="#" id="form" class="form-horizontal">
-                <input type="hidden" value="" name="id_jadwal" />
+                <input type="hidden" value="" name="id_jadwal_registrasi" />
                 <div class="card-body">
                     <div class="form-group row ">
                         <label for="thn_akademik" class="col-sm-4 col-form-label">Tahun Akademik</label>

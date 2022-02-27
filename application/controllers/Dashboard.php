@@ -12,7 +12,7 @@ class Dashboard extends MY_Controller
         $this->load->helper('myfunction_helper');
         $this->load->model('Mod_user');
         $this->load->model('Mod_aktivasi_user');
-        $this->load->model('Mod_userlevel');
+        $this->load->model('Mod_hak_akses');
         $this->load->model('Mod_dashboard');
         // backButtonHandle();
     }

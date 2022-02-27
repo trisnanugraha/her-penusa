@@ -10,7 +10,7 @@
   <!-- Font Awesome -->
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugins/fontawesome-5.5.0/css/all.min.css">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugins/fontawesome-4.3.0/css/all.min.css">
+  <!-- <link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugins/fontawesome-4.3.0/css/all.min.css"> -->
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Theme style -->
@@ -18,7 +18,7 @@
   <!-- Body style -->
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/dist/css/stylearyo.css">
   <!-- iCheck -->
-  <link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugins/iCheck/square/blue.css">
+  <!-- <link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugins/iCheck/square/blue.css"> -->
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   <!-- SweetAlert2 -->
@@ -125,7 +125,7 @@
   <!-- AdminLTE App -->
   <script src="<?php echo base_url(); ?>assets/dist/js/adminlte.min.js"></script>
   <!-- AdminLTE for demo purposes -->
-  <script src="<?php echo base_url(); ?>assets/dist/js/demo.js"></script>
+  <!-- <script src="<?php echo base_url(); ?>assets/dist/js/demo.js"></script> -->
   <!-- SweetAlert2 -->
   <script src="<?php echo base_url(); ?>assets/plugins/sweetalert2/sweetalert2.min.js"></script>
   <!-- Toastr -->
