@@ -11,6 +11,12 @@
     <script src="<?php echo base_url(); ?>assets/plugins/jquery/jquery.min.js"></script>
     <!-- ChartJS -->
     <script src="<?php echo base_url(); ?>assets/plugins/chart.js/Chart.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/plugins/ckeditor/ckeditor.js"></script>
+    <style>
+        .ck-editor__editable_inline {
+            min-height: 200px;
+        }
+    </style>
 </head>
 
 <body class="hold-transition sidebar-mini">

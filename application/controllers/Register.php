@@ -10,7 +10,10 @@ class Register extends CI_Controller
         $this->load->model('Mod_program_studi');
         $this->load->model('Mod_user');
         $this->load->model('Mod_aktivasi_user');
-        $this->load->model(array('Mod_login'));
+        $this->load->model('Mod_login');
+        $this->load->model('Mod_tahun_angkatan');
+        $this->load->model('Mod_hak_akses');
+        $this->load->model('Mod_mahasiswa');
     }
 
     public function index()
@@ -18,6 +21,7 @@ class Register extends CI_Controller
         $data['aplikasi'] = $this->Mod_login->Aplikasi()->row();
         $data['user_level'] = $this->Mod_user->userlevelRegister();
         $data['programStudi'] = $this->Mod_program_studi->get_all();
+        $data['tahun_angkatan'] = $this->Mod_tahun_angkatan->get_all();
         $this->load->view('admin/register', $data);
     }
 
@@ -26,7 +30,8 @@ class Register extends CI_Controller
         $this->_validate();
         $username = $this->input->post('username');
         $cek = $this->Mod_user->cekUsername($username);
-        if ($cek->num_rows() > 0) {
+        $cek_mhs = $this->Mod_mahasiswa->cek_nim($username);
+        if ($cek->num_rows() > 0 || $cek_mhs->num_rows() > 0) {
             echo json_encode(array("error" => "Username Sudah Ada!!"));
         } else {
             $nama = slug($this->input->post('username'));
@@ -62,16 +67,32 @@ class Register extends CI_Controller
 
                 echo json_encode(array("status" => TRUE));
             } else { //Apabila tidak ada gambar yang di upload
-                $save  = array(
-                    'id_prodi' => $this->input->post('prodi'),
-                    'username' => $this->input->post('username'),
-                    'full_name' => $this->input->post('fullname'),
-                    'password'  => get_hash($this->input->post('password')),
-                    'id_level'  => $this->input->post('level'),
-                    'is_active' => 'N'
-                );
 
-                $id = $this->Mod_user->insertUser("tbl_user", $save);
+                $userlevel = $this->Mod_hak_akses->getUserlevel($this->input->post('level'));
+
+                if ($userlevel->nama_level != 'Mahasiswa') {
+                    $save  = array(
+                        'id_prodi' => $this->input->post('prodi'),
+                        'username' => $this->input->post('username'),
+                        'full_name' => $this->input->post('fullname'),
+                        'password'  => get_hash($this->input->post('password')),
+                        'id_level'  => $this->input->post('level'),
+                        'is_active' => 'N'
+                    );
+
+                    $id = $this->Mod_user->insertUser("tbl_user", $save);
+                } else {
+                    $save  = array(
+                        'id_prodi' => $this->input->post('prodi'),
+                        'nim' => $this->input->post('username'),
+                        'nama_lengkap' => $this->input->post('fullname'),
+                        'password'  => get_hash($this->input->post('password')),
+                        'id_level'  => $this->input->post('level'),
+                        'id_angkatan' => $this->input->post('tahun-angkatan'),
+                        'status' => 'N'
+                    );
+                    $id = $this->Mod_user->insertUser("tbl_mahasiswa", $save);
+                }
 
                 $pending = array(
                     'id_user' => $id

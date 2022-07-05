@@ -48,9 +48,9 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="judul" class="col-sm-4 col-form-label">Username</label>
+                        <label for="judul" class="col-sm-4 col-form-label">NIDN / NIM</label>
                         <div class="input-group col-sm-8 kosong">
-                            <input type="text" class="form-control" name="username" placeholder="Misal : johndoe">
+                            <input type="text" class="form-control" name="username" placeholder="Misal : 12345678">
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                     <span class="fas fa-user"></span>
@@ -106,6 +106,19 @@
                             <div class="input-group-append"></div>
                         </div>
                     </div>
+                    <div class="form-group row ta">
+                        <label for="judul" class="col-sm-4 col-form-label">Tahun Angkatan</label>
+                        <div class="col-sm-8 kosong">
+                            <select class="form-control tahun-angkatan" name="tahun-angkatan">
+                                <option value="" selected disabled>-- Pilih Tahun Angkatan --</option>
+                                <?php
+                                foreach ($tahun_angkatan as $ta) { ?>
+                                    <option value="<?= $ta->id_angkatan; ?>"><?= $ta->tahun_angkatan; ?></option>
+                                <?php } ?>
+                            </select>
+                            <div class="input-group-append"></div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-12">
                             <button type="button" class="btn btn-primary btn-block" id="register">Register</button>
@@ -152,6 +165,9 @@
 
     <script>
         $(document).ready(function() {
+
+            $('.ta').hide();
+
             $("input").change(function() {
                 $(this).parent().parent().removeClass('has-error');
                 $(this).next().next().empty();
@@ -161,6 +177,16 @@
                 $(this).parent().parent().removeClass('has-error');
                 $(this).next().empty();
                 $(this).removeClass('is-invalid');
+            });
+            $('select.level').change(function() {
+                var val = $(this).find('option:selected').text();
+                console.log(val);
+                if (val == 'Mahasiswa') {
+                    $('.ta').show();
+                    // $('.subkategori-buku-umum').hide();
+                } else {
+                    $('.ta').hide();
+                }
             });
         });
 
@@ -183,7 +209,7 @@
                         });
                     } else if (data.error) {
                         toastr.error(
-                            data.pesan
+                            data.error
                         );
                     } else {
                         for (var i = 0; i < data.inputerror.length; i++) {

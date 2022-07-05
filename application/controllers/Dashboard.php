@@ -14,14 +14,14 @@ class Dashboard extends MY_Controller
         $this->load->model('Mod_aktivasi_user');
         $this->load->model('Mod_hak_akses');
         $this->load->model('Mod_dashboard');
+        $this->load->model('Mod_informasi');
         // backButtonHandle();
     }
 
     function index()
     {
         $data['judul'] = 'Dashboard';
-        $data['user'] = $this->Mod_user->total_rows();
-        $data['pendinguser'] = $this->Mod_aktivasi_user->total_rows();
+        $data['informasi'] = $this->Mod_informasi->get_all();
         // $data['dataPenelitian'] = $this->Mod_dashboard->get_total_penelitian($this->getdata());
         // $data['dataPKM'] = $this->Mod_dashboard->get_total_pkm($this->getdata());
         // $data['dataPriode'] = $this->Mod_priode->get_priode($this->getdata());
@@ -36,7 +36,8 @@ class Dashboard extends MY_Controller
             $this->template->views('dashboard/home', $data, $js);
         }
 
-        // echo json_encode($data['dataPenelitian']);
+        // echo '<pre>';
+        // print_r($data['informasi']);
         // echo json_encode($data['dataPKM']);
     }
 

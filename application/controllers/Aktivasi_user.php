@@ -38,7 +38,7 @@ class Aktivasi_user extends MY_Controller
             $row[] = $user->username;
             $row[] = $user->full_name;
             $row[] = $user->nama_level;
-            $row[] = tgl_indonesia($user->tgl_dibuat);
+            $row[] = tgl_indonesia($user->created_at);
             $row[] = $user->id_pending_user;
             $data[] = $row;
         }
