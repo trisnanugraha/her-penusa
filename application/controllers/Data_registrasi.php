@@ -8,6 +8,7 @@ class Data_registrasi extends CI_Controller
     {
         parent::__construct();
         $this->load->model('Mod_data_registrasi');
+        $this->load->model('Mod_mahasiswa');
     }
 
     public function index()
@@ -22,18 +23,43 @@ class Data_registrasi extends CI_Controller
     {
         ini_set('memory_limit', '512M');
         set_time_limit(3600);
+        // if ($this->session->userdata('role') == 'Mahasiswa') {
+        //     $list = $this->Mod_data_registrasi->get_datatables_id($this->session->userdata('id_user'));
+        // } else {
+        //     $list = $this->Mod_data_registrasi->get_datatables();
+        // }
+
         $list = $this->Mod_data_registrasi->get_datatables();
+
         $data = array();
         $no = $_POST['start'];
-        foreach ($list as $data) {
+        foreach ($list as $registrasi) {
+
+
+            if ($registrasi->tipe_pembayaran == 'A1') {
+                $registrasi->tipe_pembayaran = 'A (Non-Beasiswa)';
+            } else if($registrasi->tipe_pembayaran == 'A2'){
+                $registrasi->tipe_pembayaran = 'A (Beasiswa 25%)';
+            } else if($registrasi->tipe_pembayaran == 'A3'){
+                $registrasi->tipe_pembayaran = 'A (Beasiswa 40%)';
+            } else if($registrasi->tipe_pembayaran == 'A4'){
+                $registrasi->tipe_pembayaran = 'A (Beasiswa 50%)';
+            } else if($registrasi->tipe_pembayaran == 'A5'){
+                $registrasi->tipe_pembayaran = 'A (Beasiswa 75%)';
+            } else if($registrasi->tipe_pembayaran == 'A6'){
+                $registrasi->tipe_pembayaran = 'A (Beasiswa 100%)';
+            } else if($registrasi->tipe_pembayaran == 'B1'){
+                $registrasi->tipe_pembayaran = 'B (Non-Beasiswa)';
+            };
+
             $no++;
             $row = array();
             $row[] = $no;
-            $row[] = $data->tahun_akademik;
-            $row[] = $this->fungsi->tanggalindo($data->tanggal_mulai);
-            $row[] = $this->fungsi->tanggalindo($data->tanggal_akhir);
-            $row[] = $data->status;
-            $row[] = $data->id_jadwal_registrasi;
+            $row[] = $registrasi->semester;
+            $row[] = $registrasi->ipk;
+            $row[] = $registrasi->tipe_pembayaran;
+            $row[] = tgl_indonesia($registrasi->tgl_dibuat);
+            $row[] = $registrasi->id_registrasi;
             $data[] = $row;
         }
 
@@ -50,19 +76,46 @@ class Data_registrasi extends CI_Controller
     public function insert()
     {
         $this->_validate();
-        $save  = array(
-            'tahun_akademik'  => $this->input->post('thn_akademik'),
-            'tanggal_mulai'     => $this->input->post('tgl_mulai'),
-            'tanggal_akhir'     => $this->input->post('tgl_akhir'),
-            'status'        => $this->input->post('status'),
-        );
-        $this->Mod_jadwal_registrasi->insert($save);
+
+        $post = $this->input->post();
+
+        $this->id_mahasiswa         = $this->session->userdata('id_user');
+        $this->semester             = $post['semester'];
+        $this->ipk                  = $post['ip'];
+        $this->tipe_pembayaran      = $post['tipe_pembayaran'];
+
+        if (!empty($_FILES['berkas_krs']['name'])) {
+            $this->file_krs = $this->_upload_Pdf('krs', 'berkas_krs');
+        } else {
+            $this->file_krs = $post['file_krs'];
+        }
+
+        if (!empty($_FILES['berkas_khs']['name'])) {
+            $this->file_khs = $this->_upload_Pdf('khs', 'berkas_khs');
+        } else {
+            $this->file_khs = $post['file_khs'];
+        }
+
+        if (!empty($_FILES['berkas_pembayaran']['name'])) {
+            $this->file_slip_pembayaran = $this->_upload_Pdf('bukti pembayaran', 'berkas_pembayaran');
+        } else {
+            $this->file_slip_pembayaran = $post['file_pembayaran'];
+        }
+
+        $this->Mod_data_registrasi->insert($this);
         echo json_encode(array("status" => TRUE));
     }
 
-    public function get_jadwal_registrasi($id)
+    public function get_mhs()
     {
-        $data = $this->Mod_jadwal_registrasi->get_jadwal_registrasi_by_id($id);
+        $data = $this->Mod_mahasiswa->get_mhs_by_id($this->session->userdata['id_user']);
+        $data->prodi = $this->session->userdata('prodi');
+
+        if ($data->lokasi == 'M') {
+            $data->lokasi = 'Medan';
+        } else {
+            $data->lokasi = 'Lubuk Pakam';
+        }
         echo json_encode($data);
     }
 
@@ -94,33 +147,44 @@ class Data_registrasi extends CI_Controller
         $data['inputerror'] = array();
         $data['status'] = TRUE;
 
-        if ($this->input->post('thn_akademik') == '') {
-            $data['inputerror'][] = 'thn_akademik';
-            $data['error_string'][] = 'Tahun Akademik Tidak Boleh Kosong';
+        if ($this->input->post('semester') == '') {
+            $data['inputerror'][] = 'semester';
+            $data['error_string'][] = 'Semester Tidak Boleh Kosong';
             $data['status'] = FALSE;
         }
 
-        if ($this->input->post('tgl_mulai') == '') {
-            $data['inputerror'][] = 'tgl_mulai';
-            $data['error_string'][] = 'Tanggal Mulai Tidak Boleh Kosong';
+        if ($this->input->post('tipe_pembayaran') == '') {
+            $data['inputerror'][] = 'tipe_pembayaran';
+            $data['error_string'][] = 'Tipe Pembayaran Tidak Boleh Kosong';
             $data['status'] = FALSE;
         }
 
-        if ($this->input->post('tgl_akhir') == '') {
-            $data['inputerror'][] = 'tgl_akhir';
-            $data['error_string'][] = 'Tanggal Akhir Tidak Boleh Kosong';
-            $data['status'] = FALSE;
-        }
-
-        if ($this->input->post('status') == '') {
-            $data['inputerror'][] = 'status';
-            $data['error_string'][] = 'Status Tidak Boleh Kosong';
-            $data['status'] = FALSE;
-        }
+        // if (empty($_FILES['berkas_krs']['name'])) {
+        //     $data['inputerror'][] = 'krs';
+        //     $data['error_string'][] = 'Berkas KRS Tidak Boleh Kosong';
+        //     $data['status'] = FALSE;
+        // }
 
         if ($data['status'] === FALSE) {
             echo json_encode($data);
             exit();
+        }
+    }
+
+    private function _upload_Pdf($folder, $target)
+    {
+        $user = $this->session->userdata['full_name'];
+        $nim = $this->session->userdata['username'];
+        $format = "%d-%M-%Y--%H-%i";
+        $config['upload_path']          = './upload/' . $folder . '/';
+        $config['allowed_types']        = 'pdf|doc|docx|png|jpeg|jpg';
+        $config['overwrite']            = true;
+        $config['file_name']            = mdate($format) . "_{$nim}_{$user}";
+
+        $this->upload->initialize($config);
+
+        if ($this->upload->do_upload($target)) {
+            return $this->upload->data('file_name');
         }
     }
 }

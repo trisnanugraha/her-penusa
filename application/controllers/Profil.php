@@ -10,6 +10,7 @@ class Profil extends MY_Controller
         $this->load->model('Mod_user');
         $this->load->model('Mod_profil');
         $this->load->model('Mod_program_studi');
+        $this->load->model('Mod_tahun_angkatan');
     }
 
     public function index()
@@ -27,6 +28,9 @@ class Profil extends MY_Controller
         } else {
             $data['mahasiswa']->lokasi = 'Lubuk Pakam';
         }
+
+        $tahun_angkatan = $this->Mod_tahun_angkatan->get_angkatan_by_id($data['mahasiswa']->id_angkatan);
+        $data['mahasiswa']->tahun_angkatan = $tahun_angkatan->tahun_angkatan;
 
         $data['mahasiswa']->prodi = $this->session->userdata('prodi');
         // echo '<pre>';
@@ -57,9 +61,9 @@ class Profil extends MY_Controller
 
                 $gambar = $this->upload->data();
 
-                $this->nama_lengkap = $post['nama'];
                 $this->email = $post['email'];
                 $this->no_hp = $post['no_hp'];
+                $this->no_hp_ortu = $post['no_hp_ortu'];
                 $this->pass_foto = $gambar['file_name'];
 
                 $temp = $this->Mod_profil->get_pass_foto($id)->row_array();
@@ -73,12 +77,35 @@ class Profil extends MY_Controller
                 echo json_encode(array("status" => TRUE));
             }
         } else {
-            $this->nama_lengkap = $post['nama'];
+
             $this->email = $post['email'];
             $this->no_hp = $post['no_hp'];
+            $this->no_hp_ortu = $post['no_hp_ortu'];
 
             $this->Mod_profil->update($id, $this);
             echo json_encode(array("status" => TRUE));
+        }
+    }
+
+    public function update_pass()
+    {
+        $this->_validate_pass();
+        $id = $this->input->post('id');
+        $db = $this->Mod_profil->getMahasiswa($this->input->post('id'));
+
+        if ($this->input->post('password_lama') != null) {
+            if (hash_verified(anti_injection($this->input->post('password_lama')), $db->password)) {
+                $this->password = get_hash($this->input->post('password_baru'));
+
+                $this->Mod_profil->update($id, $this);
+                echo json_encode(array("status" => TRUE));
+            } else {
+                $data['inputerror'][] = 'password_lama';
+                $data['error_string'][] = 'Password Lama Anda Salah';
+                $data['status'] = FALSE;
+                echo json_encode($data);
+                exit();
+            }
         }
     }
 
@@ -104,6 +131,55 @@ class Profil extends MY_Controller
         if ($this->input->post('no_hp') == '') {
             $data['inputerror'][] = 'no_hp';
             $data['error_string'][] = 'No. HP Tidak Boleh Kosong';
+            $data['status'] = FALSE;
+        }
+
+        if ($this->input->post('no_hp_ortu') == '') {
+            $data['inputerror'][] = 'no_hp_ortu';
+            $data['error_string'][] = 'No. HP Orang Tua Tidak Boleh Kosong';
+            $data['status'] = FALSE;
+        }
+
+        if ($data['status'] === FALSE) {
+            echo json_encode($data);
+            exit();
+        }
+    }
+
+    private function _validate_pass()
+    {
+        $data = array();
+        $data['error_string'] = array();
+        $data['inputerror'] = array();
+        $data['status'] = TRUE;
+
+        if ($this->input->post('password_lama') == '') {
+            $data['inputerror'][] = 'password_lama';
+            $data['error_string'][] = 'Password Lama Tidak Boleh Kosong';
+            $data['status'] = FALSE;
+        }
+
+        if ($this->input->post('password_baru') == '') {
+            $data['inputerror'][] = 'password_baru';
+            $data['error_string'][] = 'Password Baru Tidak Boleh Kosong';
+            $data['status'] = FALSE;
+        }
+
+        if ($this->input->post('verify_pass') == '') {
+            $data['inputerror'][] = 'verify_pass';
+            $data['error_string'][] = 'Verifikasi Password Baru Tidak Boleh Kosong';
+            $data['status'] = FALSE;
+        }
+
+        if ($this->input->post('password_baru') != $this->input->post('verify_pass')) {
+            $data['inputerror'][] = 'password_baru';
+            $data['error_string'][] = 'Password Baru Tidak Cocok Dengan Verifikasi Password Baru';
+            $data['status'] = FALSE;
+        }
+
+        if ($this->input->post('verify_pass') != $this->input->post('password_baru')) {
+            $data['inputerror'][] = 'verify_pass';
+            $data['error_string'][] = 'Verifikasi Password Baru Tidak Cocok Dengan Password Baru';
             $data['status'] = FALSE;
         }
 

@@ -4,9 +4,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Mod_data_registrasi extends CI_Model
 {
     var $table = 'tbl_data_registrasi';
-    var $column_order = array('', 'tahun_akademik', 'tanggal_mulai', 'tanggal_akhir', 'status');
-    var $column_search = array('tahun_akademik', 'tanggal_mulai', 'tanggal_akhir', 'status');
-    var $order = array('id_jadwal_registrasi' => 'desc'); // default order 
+    var $column_order = array('', 'semester', 'ipk', 'tipe_pembayaran', 'tgl_dibuat');
+    var $column_search = array('semester', 'ipk', 'tipe_pembayaran', 'tgl_dibuat');
+    var $order = array('id_registrasi' => 'desc'); // default order 
 
     public function __construct()
     {
@@ -93,4 +93,4 @@ class Mod_data_registrasi extends CI_Model
     }
 }
 
-/* End of file Mod_jadwal_registrasi.php */
+/* End of file Mod_data_registrasi.php */

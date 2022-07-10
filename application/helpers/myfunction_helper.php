@@ -20,8 +20,8 @@ function tgl_indonesia($date)
 	//w Urutan hari dalam seminggu
 	$hari    = date("w", strtotime($date));
 
-	// $result  = $nama_hari[$hari] . ", " . $tanggal . " " . $nama_bulan[(int)$bulan - 1] . " " . $tahun . " " . $waktu . " WIB";
-	$result  = $tanggal . " " . $nama_bulan[(int)$bulan - 1] . " " . $tahun;
+	$result  = $nama_hari[$hari] . ", " . $tanggal . " " . $nama_bulan[(int)$bulan - 1] . " " . $tahun . " " . $waktu . " WIB";
+	// $result  = $tanggal . " " . $nama_bulan[(int)$bulan - 1] . " " . $tahun;
 	//keterangan (int)$bulan-1 karena array dimulai dari index ke 0 maka bulan-1
 	return $result;
 }

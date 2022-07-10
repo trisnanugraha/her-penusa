@@ -4,7 +4,7 @@
 
   $(document).ready(function() {
 
-    table = $("#tabeljadwal").DataTable({
+    table = $("#tabelregistrasi").DataTable({
       "responsive": true,
       "autoWidth": false,
       "language": {
@@ -18,7 +18,7 @@
 
       // Load data for the table's content from an Ajax source
       "ajax": {
-        "url": "<?php echo site_url('jadwal_registrasi/ajax_list') ?>",
+        "url": "<?php echo site_url('data_registrasi/ajax_list') ?>",
         "type": "POST"
       },
       //Set column definition initialisation properties.
@@ -26,29 +26,9 @@
         "targets": [0, 1, 2, 3, 4, 5],
         "className": 'text-center'
       }, {
-        "targets": [-1], //last column
-        "render": function(data, type, row) {
-          if (row[4] == "N") {
-            return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit_jadwal(" + row[5] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-danger\" href=\"javascript:void(0)\" title=\"Delete\" onclick=\"delete_jadwal(" + row[5] + ")\"><i class=\"fas fa-trash\"></i> Hapus</a></div>"
-          } else {
-            return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit_jadwal(" + row[5] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div>";
-          }
-
-        },
-        "orderable": false, //set not orderable
-      }, {
         "searchable": false,
         "orderable": false,
         "targets": 0
-      }, {
-        "targets": [-2], //last column
-        "render": function(data, type, row) {
-          if (row[4] == "N") {
-            return "<div class=\"badge bg-danger text-white text-wrap\">Non-Aktif</div>"
-          } else {
-            return "<div class=\"badge bg-success text-white text-wrap\">Aktif</div>";
-          }
-        }
       }],
     });
     $("input").change(function() {
@@ -56,16 +36,38 @@
       $(this).next().empty();
       $(this).removeClass('is-invalid');
     });
-    
+
     $("textarea").change(function() {
       $(this).parent().parent().removeClass('has-error');
       $(this).next().empty();
       $(this).removeClass('is-invalid');
     });
+
     $("select").change(function() {
       $(this).parent().parent().removeClass('has-error');
       $(this).next().empty();
       $(this).removeClass('is-invalid');
+    });
+
+    $("input [type='file']").change(function() {
+      $(this).parent().parent().removeClass('has-error');
+      $(this).next().empty();
+      $(this).removeClass('is-invalid');
+    });
+
+    $('#berkas_krs').change(function(e) {
+      var krs = e.target.files[0].name;
+      $('#label-krs').html(krs);
+    });
+
+    $('#berkas_khs').change(function(e) {
+      var khs = e.target.files[0].name;
+      $('#label-khs').html(khs);
+    });
+
+    $('#berkas_pembayaran').change(function(e) {
+      var pembayaran = e.target.files[0].name;
+      $('#label-pembayaran').html(pembayaran);
     });
   });
 
@@ -79,6 +81,21 @@
     showConfirmButton: false,
     timer: 3000
   });
+
+  var load_file_krs = function(event) {
+    var file_krs = document.getElementById('view_file_krs');
+    file_krs.href = URL.createObjectURL(event.target.files[0]);
+  };
+
+  var load_file_khs = function(event) {
+    var file_khs = document.getElementById('view_file_khs');
+    file_khs.href = URL.createObjectURL(event.target.files[0]);
+  };
+
+  var load_file_pembayaran = function(event) {
+    var file_pembayaran = document.getElementById('view_file_pembayaran');
+    file_pembayaran.href = URL.createObjectURL(event.target.files[0]);
+  };
 
   //delete
   function delete_jadwal(id) {
@@ -124,13 +141,34 @@
     })
   }
 
-  function add_jadwal() {
+  function add_data() {
     save_method = 'add';
     $('#form')[0].reset(); // reset form on modals
     $('.form-group').removeClass('has-error'); // clear error class
     $('.help-block').empty(); // clear error string
-    $('#modal_form').modal('show'); // show bootstrap modal
-    $('.modal-title').text('Tambah Jadwal Registrasi'); // Set Title to Bootstrap modal title
+
+    //Ajax Load data from ajax
+    $.ajax({
+      url: "<?php echo site_url('data_registrasi/get_mhs') ?>",
+      type: "GET",
+      dataType: "JSON",
+      success: function(data) {
+
+        $('[name="nama"]').val(data.nama_lengkap);
+        $('[name="nim"]').val(data.nim);
+        $('[name="no_hp"]').val(data.no_hp);
+        $('[name="email"]').val(data.email);
+        $('[name="prodi"]').val(data.prodi);
+        $('[name="lokasi"]').val(data.lokasi);
+        $('#modal_form').modal('show'); // show bootstrap modal
+        $('.modal-title').text('Tambah Data Registrasi Baru'); // Set Title to Bootstrap modal title
+
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        alert('Error get data from ajax');
+      }
+    });
+
   }
 
   function edit_jadwal(id) {
@@ -167,17 +205,22 @@
     var url;
 
     if (save_method == 'add') {
-      url = "<?php echo site_url('jadwal_registrasi/insert') ?>";
+      url = "<?php echo site_url('data_registrasi/insert') ?>";
     } else {
       url = "<?php echo site_url('jadwal_registrasi/update') ?>";
     }
+
+    var formdata = new FormData($('#form')[0]);
 
     // ajax adding data to database
     $.ajax({
       url: url,
       type: "POST",
-      data: $('#form').serialize(),
+      data: formdata,
       dataType: "JSON",
+      cache: false,
+      contentType: false,
+      processData: false,
       success: function(data) {
 
         if (data.status) //if success close modal and reload ajax table
@@ -187,7 +230,7 @@
           if (save_method == 'add') {
             Toast.fire({
               icon: 'success',
-              title: 'Jadwal Registrasi Berhasil Disimpan!'
+              title: 'Data Registrasi Berhasil Disimpan!'
             });
           } else if (save_method == 'update') {
             Toast.fire({
