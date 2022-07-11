@@ -23,13 +23,14 @@ class Data_registrasi extends CI_Controller
     {
         ini_set('memory_limit', '512M');
         set_time_limit(3600);
-        // if ($this->session->userdata('role') == 'Mahasiswa') {
-        //     $list = $this->Mod_data_registrasi->get_datatables_id($this->session->userdata('id_user'));
-        // } else {
-        //     $list = $this->Mod_data_registrasi->get_datatables();
-        // }
 
-        $list = $this->Mod_data_registrasi->get_datatables();
+        if ($this->session->userdata('role') != 'Mahasiswa') {
+            $id = 'admin';
+        } else {
+            $id = $this->session->userdata('id_user');
+        }
+
+        $list = $this->Mod_data_registrasi->get_datatables($id);
 
         $data = array();
         $no = $_POST['start'];
@@ -38,17 +39,17 @@ class Data_registrasi extends CI_Controller
 
             if ($registrasi->tipe_pembayaran == 'A1') {
                 $registrasi->tipe_pembayaran = 'A (Non-Beasiswa)';
-            } else if($registrasi->tipe_pembayaran == 'A2'){
+            } else if ($registrasi->tipe_pembayaran == 'A2') {
                 $registrasi->tipe_pembayaran = 'A (Beasiswa 25%)';
-            } else if($registrasi->tipe_pembayaran == 'A3'){
+            } else if ($registrasi->tipe_pembayaran == 'A3') {
                 $registrasi->tipe_pembayaran = 'A (Beasiswa 40%)';
-            } else if($registrasi->tipe_pembayaran == 'A4'){
+            } else if ($registrasi->tipe_pembayaran == 'A4') {
                 $registrasi->tipe_pembayaran = 'A (Beasiswa 50%)';
-            } else if($registrasi->tipe_pembayaran == 'A5'){
+            } else if ($registrasi->tipe_pembayaran == 'A5') {
                 $registrasi->tipe_pembayaran = 'A (Beasiswa 75%)';
-            } else if($registrasi->tipe_pembayaran == 'A6'){
+            } else if ($registrasi->tipe_pembayaran == 'A6') {
                 $registrasi->tipe_pembayaran = 'A (Beasiswa 100%)';
-            } else if($registrasi->tipe_pembayaran == 'B1'){
+            } else if ($registrasi->tipe_pembayaran == 'B1') {
                 $registrasi->tipe_pembayaran = 'B (Non-Beasiswa)';
             };
 
@@ -65,8 +66,8 @@ class Data_registrasi extends CI_Controller
 
         $output = array(
             "draw" => $_POST['draw'],
-            "recordsTotal" => $this->Mod_data_registrasi->count_all(),
-            "recordsFiltered" => $this->Mod_data_registrasi->count_filtered(),
+            "recordsTotal" => $this->Mod_data_registrasi->count_all($id),
+            "recordsFiltered" => $this->Mod_data_registrasi->count_filtered($id),
             "data" => $data,
         );
         //output to json format
