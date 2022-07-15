@@ -33,6 +33,7 @@
                                         <ul class="nav nav-pills">
                                             <li class="nav-item"><a class="nav-link active" href="#biodata" data-toggle="tab">Biodata</a></li>
                                             <li class="nav-item"><a class="nav-link" href="#berkas" data-toggle="tab">Berkas</a></li>
+                                            <li class="nav-item"><a class="nav-link" href="#komentar" data-toggle="tab">Komentar</a></li>
                                         </ul>
                                     </div>
                                     <div class="card-body">
@@ -102,6 +103,9 @@
                                                         </tr>
                                                     </tbody>
                                                 </table>
+                                            </div>
+                                            <div class="tab-pane" id="komentar">
+                                                <p name="komentar"></p>
                                             </div>
                                         </div>
                                     </div>

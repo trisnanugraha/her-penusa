@@ -261,6 +261,11 @@
         $('[name="khs"]').html("<a class=\"btn btn-sm btn-outline-success\" href=\"<?php echo site_url('upload/khs/'); ?>" + data.registrasi.file_khs + "\" target=\"_blank\" title=\"Preview\"><i class=\"fas fa-eye\"></i> Preview</a>")
         $('[name="slip_pembayaran"]').html("<a class=\"btn btn-sm btn-outline-success\" href=\"<?php echo site_url('upload/bukti pembayaran/'); ?>" + data.registrasi.file_slip_pembayaran + "\" target=\"_blank\" title=\"Preview\"><i class=\"fas fa-eye\"></i> Preview</a>")
 
+        if (data.registrasi.komentar != null) {
+          $('[name="komentar"]').text(data.registrasi.komentar);
+        } else {
+          $('[name="komentar"]').text("Belum Ada Komentar");
+        }
 
 
         // $('[name="perihal"]').text(data.perihal);
