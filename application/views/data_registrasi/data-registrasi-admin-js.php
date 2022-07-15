@@ -40,7 +40,7 @@
       }, {
         "targets": [-1], //last column
         "render": function(data, type, row) {
-          return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Detail\" onclick=\"detail(" + row[7] + ")\"><i class=\"fas fa-eye\"></i> Detail</a></div>"
+          return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Detail\" onclick=\"detail(" + row[7] + ")\"><i class=\"fas fa-eye\"></i> Detail</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-success\" href=\"javascript:void(0)\" title=\"Setujui\" onclick=\"setujui(" + row[7] + ")\"><i class=\"fas fa-check\"></i> Setujui</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-danger\" href=\"javascript:void(0)\" title=\"Tolak\" onclick=\"tolak(" + row[7] + ")\"><i class=\"fas fa-times\"></i> Tolak</a></div>"
         },
         "orderable": false, //set not orderable
       }, {
@@ -159,6 +159,67 @@
     })
   }
 
+  //delete
+  function setujui(id) {
+    var data = {
+      id_registrasi: id,
+      status: 1
+    }
+
+    Swal.fire({
+      title: 'Konfirmasi Validasi Data',
+      text: "Apakah Anda Yakin Ingin Menyetujui Data Registrasi Ini ?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Ya, Setujui Data Ini!',
+      cancelButtonText: 'Batal'
+    }).then((result) => {
+      if (result.value) {
+        $.ajax({
+          url: "<?php echo site_url('data_registrasi/validate'); ?>",
+          type: "POST",
+          data: data,
+          cache: false,
+          dataType: 'json',
+          success: function(respone) {
+            if (respone.status == true) {
+              reload_table();
+              Swal.fire({
+                icon: 'success',
+                title: 'Data Registrasi Berhasil Disetujui!'
+              });
+            } else {
+              Toast.fire({
+                icon: 'error',
+                title: 'Delete Error!!.'
+              });
+            }
+          }
+        });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal(
+          'Cancelled',
+          'Your imaginary file is safe :)',
+          'error'
+        )
+      }
+    })
+  }
+
+  function tolak(id) {
+    save_method = 'reject';
+
+    $('#form_tolak')[0].reset(); // reset form on modals
+    $('.form-group').removeClass('has-error'); // clear error class
+    $('.help-block').empty(); // clear error string
+
+    $('[name="id_registrasi"]').val(id);
+    $('#modal_form_tolak').modal('show'); // show bootstrap modal
+    $('.modal-title').text('Tolak Data Registrasi');
+  }
+
   function add_data() {
     save_method = 'add';
     $('#form')[0].reset(); // reset form on modals
@@ -186,7 +247,6 @@
         alert('Error get data from ajax');
       }
     });
-
   }
 
   function edit_jadwal(id) {
@@ -287,14 +347,15 @@
     $('#btnSave').text('Menyimpan...'); //change button text
     $('#btnSave').attr('disabled', true); //set button disable 
     var url;
+    var formdata;
 
     if (save_method == 'add') {
       url = "<?php echo site_url('data_registrasi/insert') ?>";
-    } else {
-      url = "<?php echo site_url('jadwal_registrasi/update') ?>";
+      formdata = new FormData($('#form')[0])
+    } else if (save_method == 'reject') {
+      url = "<?php echo site_url('data_registrasi/validate') ?>";
+      formdata = new FormData($('#form_tolak')[0]);
     }
-
-    var formdata = new FormData($('#form')[0]);
 
     Swal.fire({
       title: 'Konfirmasi Simpan Data',
@@ -319,6 +380,7 @@
             if (data.status) //if success close modal and reload ajax table
             {
               $('#modal_form').modal('hide');
+              $('#modal_form_tolak').modal('hide');
               reload_table();
               if (save_method == 'add') {
                 Toast.fire({
@@ -328,10 +390,10 @@
                 setTimeout(function() {
                   location.reload();
                 }, 1500);
-              } else if (save_method == 'update') {
+              } else if (save_method == 'reject') {
                 Toast.fire({
                   icon: 'success',
-                  title: 'Jadwal Registrasi Berhasil Diubah!'
+                  title: 'Data Registrasi Berhasil Ditolak!'
                 });
               }
             } else {

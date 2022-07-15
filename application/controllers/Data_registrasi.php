@@ -8,15 +8,33 @@ class Data_registrasi extends CI_Controller
     {
         parent::__construct();
         $this->load->model('Mod_data_registrasi');
+        $this->load->model('Mod_jadwal_registrasi');
         $this->load->model('Mod_mahasiswa');
+        $this->load->model('Mod_program_studi');
+        $this->load->model('Mod_tahun_angkatan');
     }
 
     public function index()
     {
         $data['judul'] = 'Data Registrasi';
+
+        $data['jadwal'] = $this->Mod_jadwal_registrasi->get_last_jadwal_registrasi();
+        $data['isInput'] = $this->Mod_data_registrasi->get_data_registrasi_by_jadwal($data['jadwal']->id_jadwal_registrasi)->num_rows(1);
+        $data['role'] = $this->session->userdata('role');
+        $data['isUpload'] = $this->Mod_mahasiswa->get_foto_mhs($this->session->userdata('id_user'))->row(1);
+
+        // $data['input'] = $isInput;
         $data['modal'] = show_my_modal('data_registrasi/modal_data_registrasi', $data);
-        $js = $this->load->view('data_registrasi/data-registrasi-js', null, true);
-        $this->template->views('data_registrasi/home', $data, $js);
+        $data['modal_detail'] = show_my_modal('data_registrasi/modal_data_registrasi_detail', $data);
+
+        if ($this->session->userdata('role') == 'Admin') {
+            $data['modal_tolak'] = show_my_modal('data_registrasi/modal_data_registrasi_tolak', $data);
+            $js = $this->load->view('data_registrasi/data-registrasi-admin-js', null, true);
+            $this->template->views('data_registrasi/home_admin', $data, $js);
+        } else {
+            $js = $this->load->view('data_registrasi/data-registrasi-js', null, true);
+            $this->template->views('data_registrasi/home', $data, $js);
+        }
     }
 
     public function ajax_list()
@@ -36,7 +54,6 @@ class Data_registrasi extends CI_Controller
         $no = $_POST['start'];
         foreach ($list as $registrasi) {
 
-
             if ($registrasi->tipe_pembayaran == 'A1') {
                 $registrasi->tipe_pembayaran = 'A (Non-Beasiswa)';
             } else if ($registrasi->tipe_pembayaran == 'A2') {
@@ -55,12 +72,36 @@ class Data_registrasi extends CI_Controller
 
             $no++;
             $row = array();
-            $row[] = $no;
-            $row[] = $registrasi->semester;
-            $row[] = $registrasi->ipk;
-            $row[] = $registrasi->tipe_pembayaran;
-            $row[] = tgl_indonesia($registrasi->tgl_dibuat);
-            $row[] = $registrasi->id_registrasi;
+
+            if ($this->session->userdata('role') != 'Mahasiswa') {
+
+                if ($registrasi->lokasi == 'M') {
+                    $registrasi->lokasi = 'Medan';
+                } else {
+                    $registrasi->lokasi = 'Lubuk Pakam';
+                }
+
+                $row[] = $no;
+                $row[] = $registrasi->ta;
+                $row[] = $registrasi->nim;
+                $row[] = $registrasi->nama_lengkap;
+                $row[] = $registrasi->nama_prodi;
+                $row[] = $registrasi->lokasi;
+                // $row[] = $registrasi->no_hp;
+                // $row[] = $registrasi->email;
+                $row[] = $registrasi->status_verifikasi;
+                $row[] = $registrasi->id_registrasi;
+            } else {
+                $row[] = $no;
+                $row[] = $registrasi->ta;
+                $row[] = $registrasi->semester;
+                $row[] = $registrasi->ipk;
+                $row[] = $registrasi->tipe_pembayaran;
+                $row[] = tgl_indonesia($registrasi->tgl_dibuat);
+                $row[] = $registrasi->status_verifikasi;
+                $row[] = $registrasi->id_registrasi;
+            }
+
             $data[] = $row;
         }
 
@@ -80,7 +121,10 @@ class Data_registrasi extends CI_Controller
 
         $post = $this->input->post();
 
+        $jadwal = $this->Mod_jadwal_registrasi->get_last_jadwal_registrasi();
+
         $this->id_mahasiswa         = $this->session->userdata('id_user');
+        $this->id_jadwal_registrasi = $jadwal->id_jadwal_registrasi;
         $this->semester             = $post['semester'];
         $this->ipk                  = $post['ip'];
         $this->tipe_pembayaran      = $post['tipe_pembayaran'];
@@ -131,6 +175,42 @@ class Data_registrasi extends CI_Controller
             'status'        => $this->input->post('status'),
         );
         $this->Mod_jadwal_registrasi->update($id, $data);
+        echo json_encode(array("status" => TRUE));
+    }
+
+    public function detail($id)
+    {
+        $data['registrasi'] = $this->Mod_data_registrasi->get_data_registrasi_by_id($id);
+        $data['mahasiswa'] = $this->Mod_mahasiswa->get_mhs_by_id($data['registrasi']->id_mahasiswa);
+        $data['prodi'] = $this->Mod_program_studi->get_prodi($data['mahasiswa']->id_prodi);
+        $data['ta'] = $this->Mod_tahun_angkatan->get_angkatan_by_id($data['mahasiswa']->id_angkatan);
+        // $data->prodi = $this->session->userdata('prodi');
+
+        // if ($data->lokasi == 'M') {
+        //     $data->lokasi = 'Medan';
+        // } else {
+        //     $data->lokasi = 'Lubuk Pakam';
+        // }
+        echo json_encode($data);
+    }
+
+    public function validate()
+    {
+        $id = $this->input->post('id_registrasi');
+
+        if ($this->input->post('status') == '1') {
+            $status = 'Terverifikasi';
+            $komentar = '';
+        } else {
+            $status = 'Ditolak';
+            $komentar = $this->input->post('komentar');
+        }
+
+        $data  = array(
+            'status_verifikasi'  => $status,
+            'komentar'  => $komentar,
+        );
+        $this->Mod_data_registrasi->validate($id, $data);
         echo json_encode(array("status" => TRUE));
     }
 

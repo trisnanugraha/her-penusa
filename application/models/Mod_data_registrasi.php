@@ -4,9 +4,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Mod_data_registrasi extends CI_Model
 {
     var $table = 'tbl_data_registrasi';
-    var $column_order = array('', 'semester', 'ipk', 'tipe_pembayaran', 'tgl_dibuat');
-    var $column_search = array('semester', 'ipk', 'tipe_pembayaran', 'tgl_dibuat');
-    var $order = array('id_registrasi' => 'desc'); // default order 
 
     public function __construct()
     {
@@ -15,13 +12,28 @@ class Mod_data_registrasi extends CI_Model
     }
     private function _get_datatables_query($id)
     {
+
         if ($id != 'admin') {
-            $this->db->where('id_mahasiswa', $id);
+            $column_order = array('', 'b.tahun_akademik', 'a.semester', 'a.ipk', 'a.tipe_pembayaran', 'a.tgl_dibuat');
+            $column_search = array('b.tahun_akademik', 'a.semester', 'a.ipk', 'a.tipe_pembayaran', 'a.tgl_dibuat');
+            $order_by = array('a.id_registrasi' => 'desc'); // default order 
+
+            $this->db->where('a.id_mahasiswa', $id);
+        } else {
+            $column_order = array('', 'b.tahun_akademik', 'c.nim', 'c.nama_lengkap', 'd.nama_prodi', 'c.lokasi', 'c.no_hp', 'c.email');
+            $column_search = array('b.tahun_akademik', 'c.nim', 'c.nama_lengkap', 'd.nama_prodi', 'c.lokasi', 'c.no_hp', 'c.email');
+            $order_by = array('a.id_registrasi' => 'desc');
         }
-        $this->db->from($this->table);
+
+        $this->db->select('a.*,b.tahun_akademik as ta, c.*, d.nama_prodi');
+        $this->db->join('tbl_jadwal_registrasi b', 'a.id_jadwal_registrasi=b.id_jadwal_registrasi');
+        $this->db->join('tbl_mahasiswa c', 'a.id_mahasiswa=c.id_mahasiswa');
+        $this->db->join('tbl_program_studi d', 'c.id_prodi=d.id_prodi');
+        $this->db->from("{$this->table} a");
+        $this->db->order_by('a.id_registrasi', 'desc');
         $i = 0;
 
-        foreach ($this->column_search as $item) // loop column 
+        foreach ($column_search as $item) // loop column 
         {
             if ($_POST['search']['value']) // if datatable send POST for search
             {
@@ -34,7 +46,7 @@ class Mod_data_registrasi extends CI_Model
                     $this->db->or_like($item, $_POST['search']['value']);
                 }
 
-                if (count($this->column_search) - 1 == $i) //last loop
+                if (count($column_search) - 1 == $i) //last loop
                     $this->db->group_end(); //close bracket
             }
             $i++;
@@ -42,9 +54,9 @@ class Mod_data_registrasi extends CI_Model
 
         if (isset($_POST['order'])) // here order processing
         {
-            $this->db->order_by($this->column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
-        } else if (isset($this->order)) {
-            $order = $this->order;
+            $this->db->order_by($column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+        } else if (isset($order_by)) {
+            $order = $order_by;
             $this->db->order_by(key($order), $order[key($order)]);
         }
     }
@@ -71,10 +83,16 @@ class Mod_data_registrasi extends CI_Model
         return $this->db->count_all_results();
     }
 
-    function get_jadwal_registrasi_by_id($id)
+    function get_data_registrasi_by_id($id)
+    {
+        $this->db->where('id_registrasi', $id);
+        return $this->db->get($this->table)->row();
+    }
+
+    function get_data_registrasi_by_jadwal($id)
     {
         $this->db->where('id_jadwal_registrasi', $id);
-        return $this->db->get($this->table)->row();
+        return $this->db->get($this->table);
     }
 
     function insert($data)
@@ -93,6 +111,12 @@ class Mod_data_registrasi extends CI_Model
     {
         $this->db->where('id_jadwal_registrasi', $id);
         $this->db->delete($this->table);
+    }
+
+    function validate($id, $data)
+    {
+        $this->db->where('id_registrasi', $id);
+        $this->db->update($this->table, $data);
     }
 }
 

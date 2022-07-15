@@ -28,10 +28,12 @@
                     <tr class="bg-info text-center">
                       <th>No.</th>
                       <th>TA</th>
-                      <th>Semester</th>
-                      <th>IP Terakhir</th>
-                      <th>Tipe Pembayaran</th>
-                      <th>Tanggal Registrasi</th>
+                      <th>NIM</th>
+                      <th>Nama Lengkap</th>
+                      <th>Prodi</th>
+                      <th>Lokasi</th>
+                      <!-- <th>No. HP</th>
+                      <th>Email</th> -->
                       <th>Status</th>
                       <th>Aksi</th>
                     </tr>
@@ -52,6 +54,5 @@
     </section>
 
 
-    <?php
-    if ($role != 'Admin') echo $modal; ?>
     <?php echo $modal_detail; ?>
+    <?php echo $modal_tolak; ?>

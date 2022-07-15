@@ -74,6 +74,11 @@ class Mod_jadwal_registrasi extends CI_Model
         return $this->db->get($this->table)->row();
     }
 
+    function get_last_jadwal_registrasi()
+    {
+        return $this->db->get($this->table)->last_row();
+    }
+
     function insert($data)
     {
         $insert = $this->db->insert($this->table, $data);
